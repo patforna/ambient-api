@@ -1,0 +1,5 @@
+#!/bin/bash
+
+BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+java ${JAVA_OPTS} $@ -cp "${BASE_DIR}/lib/*" ambient.api.Api
