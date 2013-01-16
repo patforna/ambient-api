@@ -1,6 +1,7 @@
 import ambient.api._
 import org.scalatra._
 import javax.servlet.ServletContext
+import skeleton.SkeletonController
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
