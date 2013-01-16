@@ -18,7 +18,7 @@ object Tasks {
       IO.createDirectory(stageDir)
       
       val libs = (classpath.files +++ jarPath).get x flat(stageDir / "lib")
-      val webapp = (sourceDirectory / "webapp" ** "*").get x rebase(sourceDirectory, stageDir)
+      val webapp = (sourceDirectory / "webapp" ** ("*" -- "web.xml")).get x rebase(sourceDirectory, stageDir)
       val scripts = (file("ops") / "scripts" * "*").get x flat(stageDir)
 
       IO.copy(libs ++ webapp ++ scripts)
@@ -37,7 +37,6 @@ object Tasks {
       zipFile
     }
     
-
     // --- browse tasks
     val browseTask = browse <<= (streams, port in container.Configuration) map { (streams, port) =>
       import streams.log
