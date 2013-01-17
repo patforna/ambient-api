@@ -7,7 +7,7 @@ object Tasks {
     import com.github.siasia.WebPlugin.container
 
     private val stage = TaskKey[File]("stage", "Creates an exploded, runnable app.")    
-    private val zip = TaskKey[File]("zip", "Creates a deployable artifact.")
+    private val bundle = TaskKey[File]("bundle", "Creates a deployable artifact.")
     private val browse = TaskKey[Unit]("browse", "open web browser to localhost on container:port") 
 
     // --- stage task
@@ -28,8 +28,8 @@ object Tasks {
       stageDir
     }
     
-    // --- zip task
-    def zipTask = zip <<= (stage, packageBin in Compile, streams) map { (stageDir, jarFile, streams) =>   
+    // --- bundle task
+    def bundleTask = bundle <<= (stage, packageBin in Compile, streams) map { (stageDir, jarFile, streams) =>   
       val zipFile = file(jarFile.getAbsolutePath.replace(".jar", ".zip"))
       val files = (stageDir ** "*").get x rebase(stageDir, "")
       IO.zip(files, zipFile)

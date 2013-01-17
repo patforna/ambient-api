@@ -28,7 +28,7 @@ object ApiBuild extends Build {
       resolvers += "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
       libraryDependencies ++= dependencies,
       stageTask,
-      zipTask,
+      bundleTask,
       browseTask
     )
   )
