@@ -38,6 +38,9 @@ task :setup do
   `heroku apps:create ambient-api`
   `heroku addons:add newrelic:standard`
   `heroku config:add JAVA_OPTS='-Xmx384m -Xss512k -XX:+UseCompressedOops -javaagent:tools/newrelic/newrelic.jar'`
+  # if using zerigo, make sure that registrar points at their nameservers (a.ns.zerio.net, b..., ...)
+  `heroku addons:add zerigo_dns:basic`
+  `heroku domains:add api.discoverambient.com`
 end
 
 def sbt(*targets)
