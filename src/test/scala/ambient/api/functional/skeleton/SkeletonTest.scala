@@ -5,10 +5,10 @@ import skeleton.SkeletonController
 
 class SkeletonTest extends ScalatraSpec {
 
-  addServlet(classOf[SkeletonController], "/*")
+  addServlet(classOf[SkeletonController], "/skeletons/*")
 
   it("should find the skeletons") {
-    get("/") {
+    get("/skeletons/") {
       status should equal (200)
       response.mediaType should equal (Some("application/json"))
       response.body should include ("""{"name":"Oogie Boogie","job":"Bogeyman"}""")
