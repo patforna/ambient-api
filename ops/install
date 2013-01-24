@@ -1,0 +1,34 @@
+# !!! INSTALL XCODE MANUALLY !!!
+# !!! INSTALL XCODE COMMAND LINE EXTENSIONS MANUALLY !!!
+
+# ruby via rvm
+curl -L https://get.rvm.io | bash -s stable
+rvm install 1.9.3
+rvm use 1.9.3
+
+# homebrew
+ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
+
+# git 
+brew install git
+
+# mongo
+brew install mongo
+
+# install java jdk
+# download from http://download.oracle.com/otn-pub/java/jdk/7u11-b21/jdk-7u11-macosx-x64.dmg 
+
+# scala
+brew install scala
+
+# foreman
+gem install foreman
+
+# heroku
+gem install heroku-toolbelt
+
+# cocoa pods
+gem install cocoapods 
+pod setup
+
+
