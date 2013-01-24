@@ -1,0 +1,40 @@
+db.users.ensureIndex({"location": "2d"})
+
+db.users.insert({name:'Patric Fornasier', job:'Developer at Ambient', location:[-0.104282, 51.554529]})
+db.users.insert({name:'Jae Lee', job:'Developer at Forward', location:[-0.136677,51.537731]})
+db.users.insert({name:'Marc Hofer', job:'Developer at ThoughtWorks', location:[-0.099392,51.531974]})
+
+# thoughtworks office: 51.515874,-0.125613
+db.runCommand({ geoNear: "users", near: [-0.125613,51.515874], spherical: true, distanceMultiplier: 6378137})
+
+import com.mongodb.casbah.Imports._
+val db = MongoClient("localhost")("ambient")
+val q: DBObject = MongoDBObject("geoNear" -> "users", "near" -> (-0.125613,51.515874), "spherical" -> true, "distanceMultiplier" -> 6378137) 
+val r = db.command(q)
+
+import org.json4s.DefaultFormats
+implicit val jsonFormats = DefaultFormats
+
+import org.json4s.mongo.JObjectParser.serialize
+val json = serialize(r)
+
+import org.json4s.jackson.JsonMethods._
+val results = json \ "results"
+val users = results \ "obj"
+val distances = results \ "dis"
+
+import org.json4s._
+val filtered = users removeField { x => x._1 == "_id" || x._1 == "location" }
+
+case class User(name: String)
+
+case class Nearby(user: User, distance: Int)
+
+val nearby = for {
+  JArray(results) <- json \ "results"
+  JObject(result) <- results
+  JField("dis", JDouble(distance)) <- result
+  JField("obj", JObject(user)) <- result
+  JField("name", JString(name)) <- user
+  JField("job", JString(job)) <- user
+} yield Nearby(User(name), distance.toInt) 
