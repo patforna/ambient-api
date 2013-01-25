@@ -3,8 +3,8 @@ package ambient.api.search
 import org.scalatra._
 import org.json4s.DefaultFormats
 import ambient.api.location.Location
-import ambient.api.location.Location.isLocation
 import ambient.api.web.PrettyJsonSupport
+import java.util.NoSuchElementException
 
 class SearchController extends ScalatraServlet with PrettyJsonSupport {
 
@@ -17,11 +17,10 @@ class SearchController extends ScalatraServlet with PrettyJsonSupport {
   }
 
   get("/nearby") {
-    val location = params.get("location") match {
-      case Some(x) if isLocation(x) => Location(x)
-      case _ => halt(400)
-    }
+    val location = Location(params("location"))
 
-    Map("nearby" -> service.findNearby)
+    Map("nearby" -> service.findNearby(location))
   }
+
+  error { case _: IllegalArgumentException | _: NoSuchElementException => halt(400) }
 }

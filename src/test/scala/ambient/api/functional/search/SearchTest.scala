@@ -13,9 +13,10 @@ class SearchTest extends ScalatraSpec with SpecSugar {
   private var responseBody: JValue = _
 
   describe("search nearby") {
-    it("should bark if no location has been specified") {
+    it("should bark if no or invalid location has been specified") {
       getStatus("/search/nearby") should be(400)
       getStatus("/search/nearby?location=") should be(400)
+      getStatus("/search/nearby?location=foo,bar") should be(400)
     }
 
     it("should find nearby users") {

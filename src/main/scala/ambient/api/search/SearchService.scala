@@ -2,6 +2,7 @@ package ambient.api.search
 
 import org.json4s._
 import ambient.api.user.User
+import ambient.api.location.Location
 
 import org.json4s.mongo.JObjectParser
 import com.mongodb.casbah.Imports._
@@ -14,8 +15,8 @@ class SearchService {
 
   private val db = MongoClient("localhost")("ambient")
 
-  def findNearby: List[Nearby] = {
-    val command: DBObject = MongoDBObject("geoNear" -> "users", "near" ->(-0.125613, 51.515874), "spherical" -> true, "distanceMultiplier" -> EarthRadiusInMeter)
+  def findNearby(location: Location): List[Nearby] = {
+    val command: DBObject = MongoDBObject("geoNear" -> "users", "near" ->(location.longitude, location.latitude), "spherical" -> true, "distanceMultiplier" -> EarthRadiusInMeter)
     val result = db.command(command)
 
     for {
