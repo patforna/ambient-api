@@ -18,7 +18,6 @@ class SearchController extends ScalatraServlet with PrettyJsonSupport {
 
   get("/nearby") {
     val location = Location(params("location"))
-
     Map("nearby" -> service.findNearby(location))
   }
 
