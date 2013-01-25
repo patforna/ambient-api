@@ -41,6 +41,15 @@ task :setup do
   # if using zerigo, make sure that registrar points at their nameservers (a.ns.zerio.net, b..., ...)
   `heroku addons:add zerigo_dns:basic`
   `heroku domains:add api.discoverambient.com`
+  `heroku addons:add mongohq`
+  # go to heroku dashboard and then to mongo addon
+  # create a new user / password
+  # connect via mongo console
+  # db.users.ensureIndex({"location": "2d"})
+  #
+  # db.users.insert({name:'Patric Fornasier', job:'Developer at Ambient', location:[-0.104282, 51.554529]})
+  # db.users.insert({name:'Jae Lee', job:'Developer at Forward', location:[-0.136677,51.537731]})
+  # db.users.insert({name:'Marc Hofer', job:'Developer at ThoughtWorks', location:[-0.099392,51.531974]})
 end
 
 def sbt(*targets)
