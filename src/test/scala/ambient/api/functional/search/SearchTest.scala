@@ -13,7 +13,8 @@ class SearchTest extends ScalatraSpec {
     // TODO
 
     // when I look for users near a location
-    get("/search/nearby?location=") {
+//    get("/search/nearby?location=51.515874,-0.125613") {
+    get("/search/nearby?location=51,20") {	
 
       // then they should show up
       status should equal(200)
@@ -29,5 +30,10 @@ class SearchTest extends ScalatraSpec {
                                           ]
                                         }"""))))
     }
+  }
+
+  it("should bark if no location parameter is missing") {
+    get("/search/nearby") { status should equal(400) }
+    get("/search/nearby?location=") { status should equal(400) }
   }
 }
