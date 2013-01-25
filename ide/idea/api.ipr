@@ -191,8 +191,11 @@
         <root url="file://$PROJECT_DIR$/../lib_managed" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="file://$PROJECT_DIR$/../lib_managed/sources" />
+      </SOURCES>
       <jarDirectory url="file://$PROJECT_DIR$/../lib_managed" recursive="false" />
+      <jarDirectory url="file://$PROJECT_DIR$/../lib_managed/sources" recursive="false" type="SOURCES" />
     </library>
   </component>
 </project>
