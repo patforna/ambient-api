@@ -1,15 +1,12 @@
 package ambient.api.functional.search
 
-import org.scalatra.test.scalatest.ScalatraSpec
 import org.json4s.jackson.JsonMethods._
 import org.json4s.JsonAST.JValue
-import ambient.api.functional.SpecSugar
+import ambient.api.functional.FunctionalSpec
 
-import ambient.api.config.Dependencies._
+import org.scalatra.servlet.ScalatraListener
 
-class SearchTest extends ScalatraSpec with SpecSugar {
-
-  addServlet(searchController, "/search/*") // FIXME mount listener
+class SearchTest extends FunctionalSpec {
 
   private var responseBody: JValue = _
 
