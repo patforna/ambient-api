@@ -1,9 +1,9 @@
-package ambient.api
+package ambient.api.web
 
 import org.eclipse.jetty.server.Server
-import platform.Logger
 import org.eclipse.jetty.webapp.WebAppContext
 import org.scalatra.servlet.ScalatraListener
+import ambient.api.platform.Logger
 
 class HttpServer(port: Int) extends Logger {
 

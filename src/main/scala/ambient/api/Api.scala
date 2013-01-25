@@ -2,6 +2,7 @@ package ambient.api
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.{DefaultServlet, ServletContextHandler}
 import org.eclipse.jetty.webapp.WebAppContext
+import web.HttpServer
 
 object Api {
   def main(args: Array[String]) {

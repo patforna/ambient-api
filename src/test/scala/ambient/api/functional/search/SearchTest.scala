@@ -2,38 +2,52 @@ package ambient.api.functional.search
 
 import org.scalatra.test.scalatest.ScalatraSpec
 import ambient.api.search.SearchController
+import org.json4s.jackson.JsonMethods._
+import org.json4s.JsonAST.JValue
+import ambient.api.functional.SpecSugar
 
-class SearchTest extends ScalatraSpec {
+class SearchTest extends ScalatraSpec with SpecSugar {
 
   addServlet(classOf[SearchController], "/search/*")
 
-  it("should find nearby users") {
-    import org.json4s.jackson.JsonMethods._
-    // given there are some users in the system
-    // TODO
+  private var responseBody: JValue = _
 
-    // when I look for users near a location
-//    get("/search/nearby?location=51.515874,-0.125613") {
-    get("/search/nearby?location=51,20") {	
+  describe("search nearby") {
+    it("should bark if no location has been specified") {
+      getStatus("/search/nearby") should be(400)
+      getStatus("/search/nearby?location=") should be(400)
+    }
 
-      // then they should show up
-      status should equal(200)
-      response.mediaType should equal(Some("application/json"))
-      compact(render(parse(response.body))) should be (compact(render(parse("""{
-                                          "nearby": [
-                                            {
-                                              "user": {
-                                                "name": "Jae Lee"
-                                              },
-                                              "distance": 70
-                                            }
-                                          ]
-                                        }"""))))
+    it("should find nearby users") {
+      given(thereAreSomeUsersInTheSystem)
+      when(iSearchForUsersNear("51,20")) // FIXME location=51.515874,-0.125613")
+      then(theResponseShouldInclude( """ { "user" : { "name" : "Jae Lee" }, "distance" : 2550 }  """))
     }
   }
 
-  it("should bark if no location parameter is missing") {
-    get("/search/nearby") { status should equal(400) }
-    get("/search/nearby?location=") { status should equal(400) }
+  private def thereAreSomeUsersInTheSystem {
+    // TODO implement
+  }
+
+  private def iSearchForUsersNear(location: String) {
+    responseBody = getResponse("/search/nearby?location=" + location)
+  }
+
+  private def theResponseShouldInclude(s: String) {
+    json(responseBody \ "nearby") should include(json(s))
+  }
+
+  private def json(v: JValue): String = compact(render(v))
+
+  private def json(s: String): String = json(parse(s))
+
+  private def getStatus(path: String) = get(path)(status)
+
+  private def getResponse(path: String) = {
+    get(path) {
+      status should equal(200)
+      response.mediaType should equal(Some("application/json"))
+      parse(body)
+    }
   }
 }
