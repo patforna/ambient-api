@@ -23,7 +23,7 @@
 			<urn:method>
 				<urn:name>get</urn:name>
 				<urn:parameters>
-					<!-- Primitives should written using their name: byte, short, int, long, 
+					<!-- Primitives should written using their name: byte, short, int, longitude,
 						float, double, boolean, char -->
 					<urn:type>int</urn:type>
 				</urn:parameters>

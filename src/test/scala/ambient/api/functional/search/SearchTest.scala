@@ -8,7 +8,7 @@ import ambient.api.functional.SpecSugar
 
 class SearchTest extends ScalatraSpec with SpecSugar {
 
-  addServlet(classOf[SearchController], "/search/*")
+  addServlet(classOf[SearchController], "/search/*") // FIXME mount listener
 
   private var responseBody: JValue = _
 
@@ -20,7 +20,7 @@ class SearchTest extends ScalatraSpec with SpecSugar {
 
     it("should find nearby users") {
       given(thereAreSomeUsersInTheSystem)
-      when(iSearchForUsersNear("51,20")) // FIXME location=51.515874,-0.125613")
+      when(iSearchForUsersNear("51.515874,-0.125613"))
       then(theResponseShouldInclude( """ { "user" : { "name" : "Jae Lee" }, "distance" : 2550 }  """))
     }
   }
