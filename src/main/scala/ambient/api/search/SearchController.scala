@@ -6,9 +6,7 @@ import ambient.api.location.Location
 import ambient.api.web.PrettyJsonSupport
 import java.util.NoSuchElementException
 
-class SearchController extends ScalatraServlet with PrettyJsonSupport {
-
-  private val service = new SearchService
+class SearchController(service: SearchService) extends ScalatraServlet with PrettyJsonSupport {
 
   protected implicit val jsonFormats = DefaultFormats
 
