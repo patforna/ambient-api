@@ -19,3 +19,5 @@ lib_managed/
 *.iws
 .*.sw?
 
+# jrebel
+licensing.info
