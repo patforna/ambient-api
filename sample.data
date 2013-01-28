@@ -1,6 +1,6 @@
 db.users.ensureIndex({"location": "2d"})
 
-db.users.insert({name:'Patric Fornasier', job:'Developer at Ambient', location:[-0.104282, 51.554529]})
+db.users.insert({name:'Patric Fornasier', job:'Developer at Ambient', location:[-0.104514,51.554093]})
 db.users.insert({name:'Jae Lee', job:'Developer at Forward', location:[-0.136677,51.537731]})
 db.users.insert({name:'Marc Hofer', job:'Developer at ThoughtWorks', location:[-0.099392,51.531974]})
 
