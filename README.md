@@ -1,11 +1,36 @@
-# ambient
-
+# Welcome to ambient
 
 ## Workstation Setup
 
-### JRebel
+Here's what you need on your workstation:
 
-#### Registration
+* XCode and Command Line Tools
+* [Java 7 JDK](http://download.oracle.com/otn-pub/java/jdk/7u11-b21/jdk-7u11-macosx-x64.dmg)
+* Ruby 1.9.3
+
+        curl -L https://get.rvm.io | bash -s stable
+        rvm install 1.9.3
+        rvm use 1.9.3
+
+* Homebrew
+        
+        ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
+
+* A bunch of other packages
+
+        brew install git
+        brew install scala
+        brew install mongo
+        gem install heroku-toolbelt
+        gem install foreman
+        gem install cocoapods && pod setup
+
+
+## JRebel (optional)
+
+JRebel can be set up with sbt so that code changes can be reloaded without server restarts.
+
+### Registration
 
 1.  [Register for free Scala Plan](https://my.jrebel.com/plans/)
 2.  [Download latest "no-setup" archive](http://zeroturnaround.com/software/jrebel/download/prev-releases/)
@@ -22,7 +47,7 @@
 
 > Note: I'm actually not sure if steps 2 -5 are really necessary.
 
-#### Usage
+### Usage
 
 In order to get JRebel to automatically reload changed code, start the app like this:
 
