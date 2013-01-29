@@ -3,6 +3,7 @@ package ambient.api.config
 import ambient.api.search.{NearbyMapper, SearchService, SearchController}
 import ambient.api.skeleton.SkeletonController
 import ambient.api.config.Properties._
+import ambient.api.location.{CheckinService, CheckinController}
 
 object Dependencies {
 
@@ -15,7 +16,11 @@ object Dependencies {
 
   lazy val searchService = new SearchService(db, nearbyMapper)
 
+  lazy val checkinService = new CheckinService(db)
+
   lazy val searchController = new SearchController(searchService)
+
+  lazy val checkinController = new CheckinController(checkinService)
 
   lazy val skeletonController = new SkeletonController
 }
