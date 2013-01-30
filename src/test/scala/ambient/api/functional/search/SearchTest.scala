@@ -1,20 +1,20 @@
 package ambient.api.functional.search
 
-import org.json4s.jackson.JsonMethods._
-import org.json4s.JsonAST.JValue
 import ambient.api.functional.FunctionalSpec
-
-import org.scalatra.servlet.ScalatraListener
+import ambient.api.config.Dependencies._
+import ambient.api.functional.MongoHelpers._
+import ambient.api.functional.JsonHelpers._
+import ambient.api.functional.Uri._
 
 class SearchTest extends FunctionalSpec {
 
-  private var responseBody: JValue = _
+  private implicit val collection = db("users")
 
   describe("search nearby") {
     it("should bark if no or invalid location has been specified") {
-      getStatus("/search/nearby") should be(400)
-      getStatus("/search/nearby?location=") should be(400)
-      getStatus("/search/nearby?location=foo,bar") should be(400)
+      getStatus(SearchNearbyUri) should be(400)
+      getStatus(SearchNearbyUri.params("location" -> "")) should be(400)
+      getStatus(SearchNearbyUri.params("location" -> "foo,bar")) should be(400)
     }
 
     it("should find nearby users") {
@@ -25,28 +25,17 @@ class SearchTest extends FunctionalSpec {
   }
 
   private def thereAreSomeUsersInTheSystem {
-    // TODO implement
+    clearCollection()
+    insert(""" { "name": "Patric Fornasier", "location": [-0.104514,51.554093] } """)
+    insert(""" { "name": "Jae Lee", "location": [-0.136677,51.537731] } """)
+    insert(""" { "name": "Marc Hofer", "location": [-0.099392,51.531974]} """)
   }
 
   private def iSearchForUsersNear(location: String) {
-    responseBody = getResponse("/search/nearby?location=" + location)
+    responseBody = getResponse(SearchNearbyUri.params("location" -> location))
   }
 
   private def theResponseShouldInclude(s: String) {
     json(responseBody \ "nearby") should include(json(s))
-  }
-
-  private def json(v: JValue): String = compact(render(v))
-
-  private def json(s: String): String = json(parse(s))
-
-  private def getStatus(path: String) = get(path)(status)
-
-  private def getResponse(path: String) = {
-    get(path) {
-      status should equal(200)
-      response.mediaType should equal(Some("application/json"))
-      parse(body)
-    }
   }
 }

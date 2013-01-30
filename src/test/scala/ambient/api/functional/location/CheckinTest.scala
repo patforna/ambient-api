@@ -1,12 +1,15 @@
 package ambient.api.functional.location
 
-import org.json4s.jackson.JsonMethods._
-import org.json4s.JsonAST.JValue
 import ambient.api.functional.FunctionalSpec
+import ambient.api.config.Dependencies._
+import ambient.api.functional.MongoHelpers._
+import ambient.api.functional.JsonHelpers._
+import ambient.api.functional.Uri._
 
 class CheckinTest extends FunctionalSpec {
 
-  private var responseBody: JValue = _
+  private implicit val collection = db("users")
+
   describe("check in") {
     it("should update location of user on checkin") {
       given(thereAreSomeUsersInTheSystem)
@@ -16,11 +19,13 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def thereAreSomeUsersInTheSystem {
-    // TODO implement
+    clearCollection()
+    insert(""" { "name": "Marc Hofer", "location": [-0.099392,51.531974]} """)
+    insert(""" { "name": "Jae Lee", "location": [-0.136677,51.537731] } """)
   }
 
   private def aUserChecksIn(user: String, location: String) {
-    post(s"checkins?location=$location")(status should be (200))
+    post(CheckinsUri.params("location" -> location))(status should be (200))
   }
 
   private def theUsersLocationShouldHaveBeenUpdatedTo(user: String, location: String) {
@@ -29,24 +34,10 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def iSearchForUsersNear(location: String) {
-    responseBody = getResponse("/search/nearby?location=" + location)
+    responseBody = getResponse(SearchNearbyUri.params("location" -> location))
   }
 
   private def theResponseShouldInclude(s: String) {
     json(responseBody \ "nearby") should include(json(s))
-  }
-
-  private def json(v: JValue): String = compact(render(v))
-
-  private def json(s: String): String = json(parse(s))
-
-  private def getStatus(path: String) = get(path)(status)
-
-  private def getResponse(path: String) = {
-    get(path) {
-      status should be(200)
-      response.mediaType should be(Some("application/json"))
-      parse(body)
-    }
   }
 }

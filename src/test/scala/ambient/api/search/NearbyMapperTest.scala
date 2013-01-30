@@ -21,7 +21,6 @@ class NearbyMapperTest extends FunSpec with ShouldMatchers {
       |    "obj" : {
       |      "_id" : "51006bda270d87f45f479a04",
       |      "name" : "Jae Lee",
-      |      "job" : "Developer at Forward",
       |      "location" : [ -0.136677, 51.537731 ]
       |    }
       |  }, {
@@ -29,7 +28,6 @@ class NearbyMapperTest extends FunSpec with ShouldMatchers {
       |    "obj" : {
       |      "_id" : "51006be4270d87f45f479a05",
       |      "name" : "Marc Hofer",
-      |      "job" : "Developer at ThoughtWorks",
       |      "location" : [ -0.099392, 51.531974 ]
       |    }
       |  } ]
@@ -43,8 +41,6 @@ class NearbyMapperTest extends FunSpec with ShouldMatchers {
 
   describe("map") {
     it("should convert geoNear results to Nearby objects") {
-
-
       mapper.map(dbObjectFrom(JSON)) should be(List(JAE, HOFF))
     }
 

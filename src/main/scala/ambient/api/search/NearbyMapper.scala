@@ -17,7 +17,6 @@ class NearbyMapper {
       JField("dis", JDouble(distance)) <- result
       JField("obj", JObject(user)) <- result
       JField("name", JString(name)) <- user
-      JField("job", JString(job)) <- user
     } yield Nearby(User(name), distance.toInt)
   }
 
