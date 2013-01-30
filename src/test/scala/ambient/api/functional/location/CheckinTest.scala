@@ -5,6 +5,7 @@ import ambient.api.config.Dependencies._
 import ambient.api.functional.MongoHelpers._
 import ambient.api.functional.JsonHelpers._
 import ambient.api.functional.Uri._
+import org.scalatra.test.ClientResponse
 
 class CheckinTest extends FunctionalSpec {
 
@@ -25,7 +26,9 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def aUserChecksIn(user: String, location: String) {
-    post(CheckinsUri.params("location" -> location))(status should be (200))
+    post(CheckinsUri.params("location" -> location))
+    response.status should be (200)
+    response.body should be ('empty)
   }
 
   private def theUsersLocationShouldHaveBeenUpdatedTo(user: String, location: String) {
@@ -34,10 +37,10 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def iSearchForUsersNear(location: String) {
-    responseBody = getResponse(SearchNearbyUri.params("location" -> location))
+    get(SearchNearbyUri.params("location" -> location))(asJson)
   }
 
   private def theResponseShouldInclude(s: String) {
-    json(responseBody \ "nearby") should include(json(s))
+    json(responseJson \ "nearby") should include(json(s))
   }
 }

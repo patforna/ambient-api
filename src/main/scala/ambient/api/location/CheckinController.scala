@@ -8,7 +8,7 @@ class CheckinController(service: CheckinService) extends Controller with JsonSup
   post("/") {
     val user = User("Jae Lee")//User(params("user"))
     val location = Location(params("location"))
-    Map("nearby" -> service.checkin(user, location))
+    service.checkin(user, location)
   }
 
 }

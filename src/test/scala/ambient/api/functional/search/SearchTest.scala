@@ -12,9 +12,9 @@ class SearchTest extends FunctionalSpec {
 
   describe("search nearby") {
     it("should bark if no or invalid location has been specified") {
-      getStatus(SearchNearbyUri) should be(400)
-      getStatus(SearchNearbyUri.params("location" -> "")) should be(400)
-      getStatus(SearchNearbyUri.params("location" -> "foo,bar")) should be(400)
+      get(SearchNearbyUri)(statusCode) should be (400)
+      get(SearchNearbyUri.params("location" -> ""))(statusCode) should be (400)
+      get(SearchNearbyUri.params("location" -> "foo,bar"))(statusCode) should be (400)
     }
 
     it("should find nearby users") {
@@ -32,10 +32,10 @@ class SearchTest extends FunctionalSpec {
   }
 
   private def iSearchForUsersNear(location: String) {
-    responseBody = getResponse(SearchNearbyUri.params("location" -> location))
+    get(SearchNearbyUri.params("location" -> location))(asJson)
   }
 
   private def theResponseShouldInclude(s: String) {
-    json(responseBody \ "nearby") should include(json(s))
+    json(responseJson \ "nearby") should include(json(s))
   }
 }
