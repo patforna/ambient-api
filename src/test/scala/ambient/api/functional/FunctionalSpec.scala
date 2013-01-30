@@ -11,22 +11,17 @@ trait FunctionalSpec extends ScalatraSpec with SpecSugar {
 
   var responseJson: JValue = _
 
-  var _response: ClientResponse = _
-  override def response: ClientResponse = _response
-
   override def start() {
     servletContextHandler.addEventListener(new ScalatraListener)
     super.start
   }
 
   def get[T](request: String)(implicit block: (ClientResponse => T)): T = {
-    _response = super.get(request)(super.response)
-    block(_response)
+    block(super.get(request)(super.response))
   }
 
   def post[T](request: String)(implicit block: (ClientResponse => T)): T = {
-    _response = super.post(request)(super.response)
-    block(_response)
+    block(super.post(request)(super.response))
   }
 
   def statusCode(response: ClientResponse) = response.status

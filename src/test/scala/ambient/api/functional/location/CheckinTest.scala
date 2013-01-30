@@ -26,7 +26,7 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def aUserChecksIn(user: String, location: String) {
-    post(CheckinsUri.params("location" -> location))
+    val response: ClientResponse = post(CheckinsUri.params("location" -> location))
     response.status should be (200)
     response.body should be ('empty)
   }
