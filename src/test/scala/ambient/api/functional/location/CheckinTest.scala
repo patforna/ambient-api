@@ -24,6 +24,7 @@ class CheckinTest extends FunctionalSpec {
 
     it("should maintain a history of all checkins") {
       given(thereAreSomeUsersInTheSystem)
+
       when(aUserChecksIn("Jae Lee", "1,0"))
 //      when(aUserChecksIn("Marc Hofer", "1,0")) // FIXME add when we've implemented a way to distinguish users
 //      when(aUserChecksIn("Marc Hofer", "2,0")) // FIXME add when we've implemented a way to distinguish users
@@ -65,7 +66,6 @@ class CheckinTest extends FunctionalSpec {
     val actual = results map { _.as[MongoDBList]("location") } map { loc => Location((loc(1)).asInstanceOf[Double], ((loc(0)).asInstanceOf[Double])) }
 
     val expected = locations map { Location(_) }
-
     actual should be(expected)
   }
 }

@@ -7,11 +7,9 @@ object Location {
   private val VALUE = SPACES + DOUBLE + SPACES
 	private val LOCATION_PATTERN = (VALUE + "," + VALUE).r
 
-	def isLocation(location: String): Boolean = LOCATION_PATTERN.findFirstMatchIn(location).isDefined
-
 	def apply(value: String): Location = value match {
 		case LOCATION_PATTERN(lat, long) => Location(lat.toDouble, long.toDouble)
-		case _ => throw new IllegalArgumentException(s"'${value}' does not appear to be a valid location")
+		case _ => throw new IllegalArgumentException(s"'$value' does not appear to be a valid location")
 	}
 }
 

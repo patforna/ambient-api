@@ -9,7 +9,7 @@ class SearchService(db: MongoDB, mapper: NearbyMapper) {
   private val EARTH_RADIUS_IN_METERS = 6378137
 
   def findNearby(location: Location): List[Nearby] = {
-    val cmd: DBObject = MongoDBObject("geoNear" -> "users", "near" ->(location.longitude, location.latitude), "spherical" -> true, "distanceMultiplier" -> EARTH_RADIUS_IN_METERS)
+    val cmd = Map("geoNear" -> "users", "near" -> (location.longitude, location.latitude), "spherical" -> true, "distanceMultiplier" -> EARTH_RADIUS_IN_METERS)
     val result = db.command(cmd)
     result.throwOnError // FIXME not tested!
     mapper.map(result)
