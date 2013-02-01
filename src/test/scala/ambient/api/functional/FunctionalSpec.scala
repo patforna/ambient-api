@@ -6,8 +6,9 @@ import org.json4s.JsonAST.JValue
 import org.json4s.jackson.JsonMethods._
 import scala.Some
 import org.scalatra.test.ClientResponse
+import org.scalatest.BeforeAndAfterEach
 
-trait FunctionalSpec extends ScalatraSpec with SpecSugar {
+trait FunctionalSpec extends ScalatraSpec with BeforeAndAfterEach with SpecSugar {
 
   var responseJson: JValue = _
 
@@ -24,9 +25,9 @@ trait FunctionalSpec extends ScalatraSpec with SpecSugar {
     block(super.post(request)(super.response))
   }
 
-  def statusCode(response: ClientResponse) = response.status
+  def statusCode(response: ClientResponse): Int = response.status
 
-  def asJson(response: ClientResponse) = {
+  def asJson(response: ClientResponse) {
     response.status should be(200)
     response.mediaType should be(Some("application/json"))
     responseJson = parse(response.body)

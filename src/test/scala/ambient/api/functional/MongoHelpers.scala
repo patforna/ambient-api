@@ -8,6 +8,7 @@ import ambient.api.functional.JsonHelpers._
 import org.json4s.mongo.JObjectParser
 import org.json4s.DefaultFormats
 import com.mongodb.casbah.commons.MongoDBObject
+import scala.language.implicitConversions
 
 object MongoHelpers {
 

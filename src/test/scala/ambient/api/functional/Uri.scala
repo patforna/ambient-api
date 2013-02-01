@@ -1,11 +1,16 @@
 package ambient.api.functional
 
+import scala.language.implicitConversions
+
 object Uri {
 
   implicit def uriToString(uri: Uri): String = uri.toString
 
   val CheckinsUri = Uri("/checkins")
   val SearchNearbyUri = Uri("/search/nearby")
+  val UsersSearchUri = Uri("/users/search")
+  val UsersUri = Uri("/users")
+
 }
 
 case class Uri(path: String, params: (Any, Any)*) {

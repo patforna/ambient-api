@@ -15,11 +15,16 @@ class CheckinTest extends FunctionalSpec {
   private implicit val collection = db("users")
   private val checkins = db("checkins")
 
+  override def beforeEach {
+    clearCollection()
+    clearCollection()(checkins)
+  }
+
   describe("check in") {
     it("should update the location of the user who checks in") {
       given(thereAreSomeUsersInTheSystem)
       when(aUserChecksIn("Jae Lee", "42.2,18.8"))
-      then(theUsersLocationShouldHaveBeenUpdatedTo("Jae Lee", "42.2,18.8"))
+      `then`(theUsersLocationShouldHaveBeenUpdatedTo("Jae Lee", "42.2,18.8"))
     }
 
     it("should maintain a history of all checkins") {
@@ -31,13 +36,11 @@ class CheckinTest extends FunctionalSpec {
       when(aUserChecksIn("Jae Lee", "2,0"))
       when(aUserChecksIn("Jae Lee", "3,0"))
 
-      then(theUsersCheckinHistoryShouldBe("Jae Lee", List("1,0", "2,0", "3,0")))
+      `then`(theUsersCheckinHistoryShouldBe("Jae Lee", List("1,0", "2,0", "3,0")))
     }
   }
 
   private def thereAreSomeUsersInTheSystem {
-    clearCollection()
-    clearCollection()(checkins)
     insert(""" { "name": "Marc Hofer", "location": [-0.099392,51.531974]} """)
     insert(""" { "name": "Jae Lee", "location": [-0.136677,51.537731] } """)
   }

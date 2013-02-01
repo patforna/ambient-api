@@ -7,10 +7,10 @@ import org.json4s.jackson.JsonMethods._
 
 object JsonHelpers {
 
-  def serialize(obj: Any):JValue = JObjectParser.serialize(obj)(DefaultFormats)
+  def serialize(obj: Any): JValue = JObjectParser.serialize(obj)(DefaultFormats)
 
   def json(v: JValue): String = compact(render(v))
 
-  def json(s: String): String = json(parse(s))
+  def json(s: String): String = json(parse(s.stripMargin))
 
 }

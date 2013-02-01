@@ -10,6 +10,10 @@ class SearchTest extends FunctionalSpec {
 
   private implicit val collection = db("users")
 
+  override def beforeEach {
+    clearCollection()
+  }
+
   describe("search nearby") {
     it("should bark if no or invalid location has been specified") {
       get(SearchNearbyUri)(statusCode) should be (400)
@@ -20,12 +24,11 @@ class SearchTest extends FunctionalSpec {
     it("should find nearby users") {
       given(thereAreSomeUsersInTheSystem)
       when(iSearchForUsersNear("51.515874,-0.125613"))
-      then(theResponseShouldInclude( """ { "user" : { "name" : "Jae Lee" }, "distance" : 2550 }  """))
+      `then`(theResponseShouldInclude( """ { "user" : { "name" : "Jae Lee" }, "distance" : 2550 }  """))
     }
   }
 
   private def thereAreSomeUsersInTheSystem {
-    clearCollection()
     insert(""" { "name": "Patric Fornasier", "location": [-0.104514,51.554093] } """)
     insert(""" { "name": "Jae Lee", "location": [-0.136677,51.537731] } """)
     insert(""" { "name": "Marc Hofer", "location": [-0.099392,51.531974]} """)
