@@ -3,16 +3,26 @@ HOST: http://api.discoverambient.com
 --- Ambient API ---
 
 -- User --
-Blablabla...
-GET /users/find?fb=:id
+Returns the user with the given facebook id.
+GET /users/find?fb=:string
 < 200
 < Content-Type: application/json
-{ "items": [
-  { "url": "/shopping-cart/1", "product":"2ZY48XPZ", "quantity": 1, "name": "New socks", "price": 1.25 }
-] }
+{
+  "user" : {
+    "id" : "123",
+    "name" : "Stefan Fazzlar"	  
+  }
+}
+
+Creates a new user. Returns nothing. 
+POST /users?fb=:string&first=:string&last=:string
+< 200
+< Content-Type: application/json
+
 
 -- Nearby/Search --
-GET /search/nearby?location=:lat,:long
+Returns a collection of (user, distance) tuples.
+GET /search/nearby?location=:double,double
 < 200
 < Content-Type: application/json
 {
@@ -29,7 +39,9 @@ GET /search/nearby?location=:lat,:long
   } ]
 }
 
+
 -- Checkins --
-POST /checkins?location=:lat,:long
+Creates a new checkin. Returns nothing.
+POST /checkins?location=:double,double
 < 200
 < Content-Type: application/json
