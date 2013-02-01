@@ -1,0 +1,35 @@
+HOST: http://api.discoverambient.com
+
+--- Ambient API ---
+
+-- User --
+Blablabla...
+GET /users/find?fb=:id
+< 200
+< Content-Type: application/json
+{ "items": [
+  { "url": "/shopping-cart/1", "product":"2ZY48XPZ", "quantity": 1, "name": "New socks", "price": 1.25 }
+] }
+
+-- Nearby/Search --
+GET /search/nearby?location=:lat,:long
+< 200
+< Content-Type: application/json
+{
+  "nearby" : [ {
+    "user" : {
+      "name" : "Marc Hofer"
+    },
+    "distance" : 2003
+  }, {
+    "user" : {
+      "name" : "Jae Lee"
+    },
+    "distance" : 4585
+  } ]
+}
+
+-- Checkins --
+POST /checkins?location=:lat,:long
+< 200
+< Content-Type: application/json
