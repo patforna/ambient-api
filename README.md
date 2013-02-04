@@ -19,7 +19,7 @@ Here's what you need on your workstation:
 * A bunch of other packages
 
         brew install git
-        brew install scala
+        brew install scala --with-docs
         brew install mongo
         gem install heroku-toolbelt
         gem install foreman
