@@ -16,25 +16,31 @@ class UserTest extends FunctionalSpec {
 
   private implicit val collection = db("users")
 
-  override def beforeEach {
+
+
+
+  override def beforeEach() {
     clearCollection()
   }
 
-  describe("creating and loading a user") {
+  describe("finding a user") {
 
-    it("should find a user by FB id") {
-      pending
-      val id = insert(Map("fb_id" -> "500", "name" -> name))
+    it("should find a user by her Facebook id (fb)") {
+      val id = insert(Map("name" -> name, "fbid" -> fb))
 
-      get(UsersSearchUri.params("fb" -> "5000"))(asJson)
+      get(UsersSearchUri.params("fb" -> fb))(asJson)
 
-      json(responseJson \ "user" \ "id") should be("Stefan Fazzlar")
-      json(responseJson \ "user" \ "name") should be(id)
+      (responseJson \ "user" \ "id").extract[String] should be(id.toString)
     }
+  }
+
+  describe("creating a user") {
 
     it("should create a user using (fb, first, last)") {
       pending
       post(UsersUri.params("fb" -> fb, "first" -> first, "last" -> last))
+
+      // todo check response from POST
 
       get(UsersSearchUri.params("fb" -> fb))(asJson)
 

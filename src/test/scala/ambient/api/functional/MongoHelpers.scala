@@ -21,12 +21,10 @@ object MongoHelpers {
     collection.remove(MongoDBObject.empty)
   }
 
-  // returns _id of inserted document
-  def insert(document: DBObject)(implicit collection: MongoCollection): AnyRef = {
+  def insert(document: DBObject)(implicit collection: MongoCollection): ObjectId = {
     collection.insert(document)
-    document("_id")
+    document.as[ObjectId]("_id")
   }
-
 
   // FIXME: no need to use json here
   def findOneById(id: AnyRef)(implicit collection: MongoCollection): JValue = serialize(collection.findOneByID(id).get)

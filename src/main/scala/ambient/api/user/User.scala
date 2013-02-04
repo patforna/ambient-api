@@ -1,3 +1,7 @@
 package ambient.api.user
 
-case class User(name: String)
+object User {
+  def apply(name: String): User = User(None, name)
+}
+
+case class User(id: Option[String], name: String)

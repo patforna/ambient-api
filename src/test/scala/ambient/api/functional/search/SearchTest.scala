@@ -10,7 +10,7 @@ class SearchTest extends FunctionalSpec {
 
   private implicit val collection = db("users")
 
-  override def beforeEach {
+  override def beforeEach() {
     clearCollection()
   }
 

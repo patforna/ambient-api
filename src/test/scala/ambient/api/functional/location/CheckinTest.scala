@@ -15,7 +15,7 @@ class CheckinTest extends FunctionalSpec {
   private implicit val collection = db("users")
   private val checkins = db("checkins")
 
-  override def beforeEach {
+  override def beforeEach() {
     clearCollection()
     clearCollection()(checkins)
   }

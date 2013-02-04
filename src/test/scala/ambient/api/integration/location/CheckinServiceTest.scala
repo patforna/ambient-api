@@ -21,7 +21,7 @@ class CheckinServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfter
 
   private val ANOTHER_USER = User("The Fazz")
 
-  override def beforeEach {
+  override def beforeEach() {
     clearCollection()
     clearCollection()(checkins)
   }

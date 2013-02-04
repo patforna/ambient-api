@@ -7,8 +7,11 @@ import org.json4s.jackson.JsonMethods._
 import scala.Some
 import org.scalatra.test.ClientResponse
 import org.scalatest.BeforeAndAfterEach
+import org.json4s.DefaultFormats
 
 trait FunctionalSpec extends ScalatraSpec with BeforeAndAfterEach with SpecSugar {
+
+  implicit val jsonFormats = DefaultFormats
 
   var responseJson: JValue = _
 
