@@ -4,24 +4,33 @@ HOST: http://api.discoverambient.com
 
 -- User --
 Returns the user with the given facebook id.
-GET /users/find?fb=:string
+Other: 400, 404
+GET /users/search?fb=:string
 < 200
 < Content-Type: application/json
 {
   "user" : {
     "id" : "123",
-    "name" : "Stefan Fazzlar"	  
+    "name" : "Stefan Fazzlar"
   }
 }
 
-Creates a new user. Returns nothing. 
+Creates a new user. The newly created user.
+Other; 400, 409
 POST /users?fb=:string&first=:string&last=:string
 < 200
 < Content-Type: application/json
+{
+  "user" : {
+    "id" : "123",
+    "name" : "Stefan Fazzlar"
+  }
+}
 
 
 -- Nearby/Search --
 Returns a collection of (user, distance) tuples.
+Other: 400
 GET /search/nearby?location=:double,double
 < 200
 < Content-Type: application/json
@@ -42,6 +51,7 @@ GET /search/nearby?location=:double,double
 
 -- Checkins --
 Creates a new checkin. Returns nothing.
+Other: 400
 POST /checkins?location=:double,double
 < 200
 < Content-Type: application/json
