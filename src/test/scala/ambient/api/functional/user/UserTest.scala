@@ -32,6 +32,10 @@ class UserTest extends FunctionalSpec {
       get(UsersSearchUri.params("fb" -> "does-not-exist"))(statusCode) should be (404)
     }
 
+    it("should return 400 no Facebook id given") {
+      get(UsersSearchUri)(statusCode) should be (400)
+    }
+
   }
 
   describe("creating a user") {
