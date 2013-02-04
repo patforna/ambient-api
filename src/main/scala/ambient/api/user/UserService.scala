@@ -1,6 +1,7 @@
 package ambient.api.user
 
 import com.mongodb.casbah.Imports._
+import ambient.api.platform.NotFoundException
 
 class UserService(db: MongoDB) {
 
@@ -9,7 +10,7 @@ class UserService(db: MongoDB) {
   def search(fbid: String): User = {
     users.findOne(Map("fbid" -> fbid)) match {
       case Some(x) => map(x)
-      case _ => throw new IllegalArgumentException("not found") // TODO
+      case _ => throw new NotFoundException(s"Can't find user with fbid '$fbid'")
     }
   }
 

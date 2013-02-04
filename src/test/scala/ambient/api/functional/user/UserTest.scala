@@ -16,9 +16,6 @@ class UserTest extends FunctionalSpec {
 
   private implicit val collection = db("users")
 
-
-
-
   override def beforeEach() {
     clearCollection()
   }
@@ -27,11 +24,14 @@ class UserTest extends FunctionalSpec {
 
     it("should find a user by her Facebook id (fb)") {
       val id = insert(Map("name" -> name, "fbid" -> fb))
-
       get(UsersSearchUri.params("fb" -> fb))(asJson)
-
       (responseJson \ "user" \ "id").extract[String] should be(id.toString)
     }
+
+    it("should return 404 if no user with given Facebook id found") {
+      get(UsersSearchUri.params("fb" -> "does-not-exist"))(statusCode) should be (404)
+    }
+
   }
 
   describe("creating a user") {
@@ -46,6 +46,7 @@ class UserTest extends FunctionalSpec {
 
       json(responseJson \ "user" \ "name") should be(name)
     }
+
   }
 
 
