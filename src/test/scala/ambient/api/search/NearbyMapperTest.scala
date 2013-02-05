@@ -1,56 +1,38 @@
 package ambient.api.search
 
-import org.scalatest.FunSpec
+import org.scalatest.{BeforeAndAfterEach, OneInstancePerTest, FunSpec}
 import org.scalatest.matchers.ShouldMatchers
-import org.json4s.mongo.JObjectParser
 
-import org.json4s.DefaultFormats
-import org.json4s.jackson.JsonMethods._
-import ambient.api.user.User
+import ambient.api.user.{UserMapper, User}
+import com.mongodb.casbah.Imports._
 
-class NearbyMapperTest extends FunSpec with ShouldMatchers {
+import org.scalatest.mock.MockitoSugar
+import org.mockito.Mockito._
 
-  private val JSON =
-    """
-      |{
-      |  "serverUsed" : "localhost/127.0.0.1:27017",
-      |  "ns" : "ambient.users",
-      |  "near" : "0110111010111010111011001000011000001100010110010100",
-      |  "results" : [ {
-      |    "dis" : 2550.9179842894273,
-      |    "obj" : {
-      |      "_id" : "51006bda270d87f45f479a04",
-      |      "first" : "Jae",
-      |      "last" : "Lee",
-      |      "location" : [ -0.136677, 51.537731 ]
-      |    }
-      |  }, {
-      |    "dis" : 2551.5466370459762,
-      |    "obj" : {
-      |      "_id" : "51006be4270d87f45f479a05",
-      |      "first" : "Marc",
-      |      "last"  : "Hofer",
-      |      "fbid"  : "456",
-      |      "location" : [ -0.099392, 51.531974 ]
-      |    }
-      |  } ]
-      |}
-    """.stripMargin
+class NearbyMapperTest extends FunSpec with ShouldMatchers with BeforeAndAfterEach with OneInstancePerTest with MockitoSugar {
 
-  private val JAE = Nearby(User("Jae", "Lee"), 2550)
-  private val HOFF = Nearby(User("Marc", "Hofer", "456"), 2551)
+  val distance = 2551.546
+  val userDoc: DBObject = Map("name" -> "whatever")
+  val resultDoc: DBObject = Map("dis" -> distance, "obj" -> userDoc)
+  val user = User("Foo", "Bar")
 
-  private val mapper = new NearbyMapper
+  val userMapper = mock[UserMapper]
+  val mapper = new NearbyMapper(userMapper)
 
-  describe("map") {
-    it("should convert geoNear results to Nearby objects") {
-      mapper.map(dbObjectFrom(JSON)) should be(List(JAE, HOFF))
-    }
-
-    it("should gracefully handle empty results") {
-      mapper.map(dbObjectFrom("{}")) should have size 0
-    }
+  override def beforeEach() {
+    when(userMapper.map(userDoc)).thenReturn(user)
   }
 
-  private def dbObjectFrom(json: String) = JObjectParser.parse(parse(json))(DefaultFormats)
+  describe("map to nearby object") {
+
+    it("should construct a Nearby object") {
+      val doc = Map("results" -> MongoDBList(resultDoc, resultDoc))
+      mapper.map(doc) should be(List(Nearby(user, distance.toInt), Nearby(user, distance.toInt)))
+    }
+
+    it("should return empty list when no results") {
+      val doc: DBObject = Map("results" -> MongoDBList())
+      mapper.map(doc) should be('empty)
+    }
+  }
 }

@@ -1,24 +1,20 @@
 package ambient.api.search
 
-import ambient.api.user.User
-
+import ambient.api.user.UserMapper
 import com.mongodb.casbah.Imports._
 
+class NearbyMapper(userMapper: UserMapper) {
 
-class NearbyMapper {
+  def map(doc: DBObject): List[Nearby] = {
 
-  def map(result: DBObject): List[Nearby] = {
-
-    val results = result.getAsOrElse[MongoDBList]("results", new MongoDBList) map { _.asInstanceOf[DBObject] }
+    // TODO pull out "CollectionMapper" #maybe
+    val results = doc.getAsOrElse[MongoDBList]("results", new MongoDBList) map { _.asInstanceOf[DBObject] }
 
     (results map {
       x =>
         val distance = x.as[Double]("dis").toInt
-        val obj = x.as[DBObject]("obj")
-        val first = obj.as[String]("first")
-        val last = obj.as[String]("last")
-        val fbid = obj.getAs[String]("fbid")
-        Nearby(User(None, fbid, first, last), distance)
+        val user = userMapper.map(x.as[DBObject]("obj"))
+        Nearby(user, distance)
     }).toList
   }
 }

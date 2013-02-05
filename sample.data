@@ -1,8 +1,8 @@
 db.users.ensureIndex({"location": "2d"})
 
-db.users.insert({name:'Patric Fornasier', job:'Developer at Ambient', location:[-0.104514,51.554093]})
-db.users.insert({name:'Jae Lee', job:'Developer at Forward', location:[-0.136677,51.537731]})
-db.users.insert({name:'Marc Hofer', job:'Developer at ThoughtWorks', location:[-0.099392,51.531974]})
+db.users.insert({first:'Patric', last:'Fornasier', fbid:"42", job:'Developer at Ambient', location:[-0.104514,51.554093]})
+db.users.insert({first:'Jae', last:'Lee', fbid:"142", job:'Developer at Forward', location:[-0.136677,51.537731]})
+db.users.insert({first:'Marc', last:'Hofer', fbid:"242", job:'Developer at ThoughtWorks', location:[-0.099392,51.531974]})
 
 # thoughtworks office: 51.515874,-0.125613
 db.runCommand({ geoNear: "users", near: [-0.125613,51.515874], spherical: true, distanceMultiplier: 6378137})

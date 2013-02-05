@@ -56,15 +56,17 @@ class CheckinTest extends FunctionalSpec {
 
   private def theUsersLocationShouldHaveBeenUpdatedTo(user: User, location: String) {
     iSearchForUsersNear(location)
-    theResponseShouldInclude( s""" { "user" : { "first" : "${user.first}", "last" : "${user.last}" }, "distance" : 0 }  """)
+    theResponseShouldInclude( s""" { "user" : { "first" : "${user.first}", "last" : "${user.last}", "location" : [$location]}, "distance" : 0 }  """)
   }
 
   private def iSearchForUsersNear(location: String) {
     get(SearchNearbyUri.params("location" -> location))(asJson)
   }
 
-  private def theResponseShouldInclude(s: String) {
-    json(responseJson \ "nearby") should include(json(s))
+  private def theResponseShouldInclude(s: String) { // FIXME this is duplicated from SearchTest (move into steps)
+    val ignore = List("id")
+    val nearby = (responseJson \ "nearby")(0).removeField { case (k, _) => ignore.contains(k) }
+    json(nearby) should include(json(s))
   }
 
   private def theUsersCheckinHistoryShouldBe(user: User, locations: List[String]) {
