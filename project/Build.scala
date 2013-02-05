@@ -25,6 +25,7 @@ object ApiBuild extends Build {
       logLevel := Level.Info,
       showTiming := true,
       fork := true,
+      testOptions in Test += Tests.Argument("-oDF"),
       resolvers += "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
       libraryDependencies ++= dependencies,
       stageTask,
