@@ -12,9 +12,7 @@ class UserServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfterEac
 
   private implicit val collection = db("users")
 
-  private val USER = User("The Hoff")
-
-  private val FBID = "42"
+  private val USER = User("The", "Hoff", "42")
 
   override def beforeEach() {
     clearCollection()
@@ -22,13 +20,27 @@ class UserServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfterEac
 
   describe("finding a user") {
     it("should find a user by her facebook id (fbid)") {
-      val id = insert(Map("name" -> USER.name, "fbid" -> FBID))
-      val user = service.search(FBID)
+      val id = insert("first" -> USER.first, "last" -> USER.last, "fbid" -> USER.fbid.get)
+      val user = service.search(USER.fbid.get)
       user.id.get should be(id.toString)
     }
 
-    it("should blow up if fb id can't be found") {
+    it("should blow up if fbid can't be found") {
       intercept[NotFoundException] { service.search("not-there") }
+    }
+  }
+
+  describe("creating a user") {
+    it("should create a user given (first, last, fbid)") {
+      service.create(USER)
+      val user = service.search(USER.fbid.get)
+      user.first should be (USER.first)
+      user.last should be (USER.last)
+    }
+
+    it("should return the created user") {
+      val user = service.create(USER)
+      service.search(USER.fbid.get).id should be (user.id)
     }
   }
 

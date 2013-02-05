@@ -15,7 +15,7 @@ class CheckinService(db: MongoDB) {
   private val checkins = db("checkins")
 
   def checkin(user: User, location: Location) {
-    users.update(Map("name" -> user.name), $set(List("location" ->(location.longitude, location.latitude))))
-    checkins.insert(Map("name" -> user.name, "location" -> List(location.longitude, location.latitude), "time" -> DateTime.now))
+    users.update(Map("first" -> user.first, "last" -> user.last), $set(List("location" ->(location.longitude, location.latitude))))
+    checkins.insert(Map("first" -> user.first, "last" -> user.last, "location" -> List(location.longitude, location.latitude), "time" -> DateTime.now))      // FIXME use user.id
   }
 }

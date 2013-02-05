@@ -7,6 +7,12 @@ class UserService(db: MongoDB) {
 
   private val users = db("users")
 
+  def create(user: User): User = {
+    val doc: DBObject = Map("first" -> user.first, "last" -> user.last, "fbid" -> user.fbid)
+    users.insert(doc)
+    map(doc)
+  }
+
   def search(fbid: String): User = {
     users.findOne(Map("fbid" -> fbid)) match {
       case Some(x) => map(x)
@@ -14,11 +20,13 @@ class UserService(db: MongoDB) {
     }
   }
 
-  def map(user: DBObject): User = {
+  private def map(user: DBObject): User = {         // TODO pull out and unit test
     val id = user.as[ObjectId]("_id").toString
-    val name = user.as[String]("name")
+    val first = user.as[String]("first")
+    val last = user.as[String]("last")
+    val fbid = user.getAs[String]("fbid")
 
-    User(Some(id), name)
+    User(Some(id), fbid, first, last)
   }
 
 }

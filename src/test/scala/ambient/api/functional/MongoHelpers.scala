@@ -21,6 +21,10 @@ object MongoHelpers {
     collection.remove(MongoDBObject.empty)
   }
 
+  def insert(keyValues: (String, Any)*)(implicit collection: MongoCollection): ObjectId = {
+    insert(keyValues.toMap)
+  }
+
   def insert(document: DBObject)(implicit collection: MongoCollection): ObjectId = {
     collection.insert(document)
     document.as[ObjectId]("_id")

@@ -24,14 +24,14 @@ class SearchTest extends FunctionalSpec {
     it("should find nearby users") {
       given(thereAreSomeUsersInTheSystem)
       when(iSearchForUsersNear("51.515874,-0.125613"))
-      `then`(theResponseShouldInclude( """ { "user" : { "name" : "Jae Lee" }, "distance" : 2550 }  """))
+      `then`(theResponseShouldInclude( """ { "user" : { "first" : "Jae", "last": "Lee" }, "distance" : 2550 }  """))
     }
   }
 
   private def thereAreSomeUsersInTheSystem {
-    insert(""" { "name": "Patric Fornasier", "location": [-0.104514,51.554093] } """)
-    insert(""" { "name": "Jae Lee", "location": [-0.136677,51.537731] } """)
-    insert(""" { "name": "Marc Hofer", "location": [-0.099392,51.531974]} """)
+    insert(""" { "first": "Patric", "last": "Fornasier", "location": [-0.104514,51.554093] } """)
+    insert(""" { "first": "Jae", "last": "Lee", "location": [-0.136677,51.537731] } """)
+    insert(""" { "first": "Marc", "last": "Hofer", "location": [-0.099392,51.531974]} """)
   }
 
   private def iSearchForUsersNear(location: String) {

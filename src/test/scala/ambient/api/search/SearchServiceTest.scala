@@ -13,7 +13,7 @@ import com.mongodb.{CommandResult, DBObject}
 
 class SearchServiceTest extends FunSpec with ShouldMatchers with OneInstancePerTest with MockitoSugar {
 
-  private val NEARBY_USERS = List(Nearby(User("Foo"), distance = 42))
+  private val NEARBY_USERS = List(Nearby(User("Foo", "Bar"), distance = 42))
   private val RESULT = mock[CommandResult]
 
   private val db = mock[MongoDB]

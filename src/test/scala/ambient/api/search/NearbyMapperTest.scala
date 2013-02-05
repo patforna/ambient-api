@@ -20,22 +20,25 @@ class NearbyMapperTest extends FunSpec with ShouldMatchers {
       |    "dis" : 2550.9179842894273,
       |    "obj" : {
       |      "_id" : "51006bda270d87f45f479a04",
-      |      "name" : "Jae Lee",
+      |      "first" : "Jae",
+      |      "last" : "Lee",
       |      "location" : [ -0.136677, 51.537731 ]
       |    }
       |  }, {
       |    "dis" : 2551.5466370459762,
       |    "obj" : {
       |      "_id" : "51006be4270d87f45f479a05",
-      |      "name" : "Marc Hofer",
+      |      "first" : "Marc",
+      |      "last"  : "Hofer",
+      |      "fbid"  : "456",
       |      "location" : [ -0.099392, 51.531974 ]
       |    }
       |  } ]
       |}
     """.stripMargin
 
-  private val JAE = Nearby(User("Jae Lee"), 2550)
-  private val HOFF = Nearby(User("Marc Hofer"), 2551)
+  private val JAE = Nearby(User("Jae", "Lee"), 2550)
+  private val HOFF = Nearby(User("Marc", "Hofer", "456"), 2551)
 
   private val mapper = new NearbyMapper
 

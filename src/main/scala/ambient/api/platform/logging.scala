@@ -16,6 +16,10 @@ sealed class LoggerWrapper(delegate: Slf4jLogger) {
 
   def info(message: => String) = if (delegate.isInfoEnabled) delegate.info(message)
 
+  def warn(message: => String) = if (delegate.isWarnEnabled) delegate.warn(message)
+
+  def warn(message: => String, e: Throwable) = if (delegate.isWarnEnabled) delegate.warn(message, e)
+
   def error(message: => String) = if (delegate.isErrorEnabled) delegate.error(message)
 
   def error(message: => String, e: Throwable) = if (delegate.isErrorEnabled) delegate.error(message, e)
