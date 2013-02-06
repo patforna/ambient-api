@@ -4,8 +4,7 @@ import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 import ambient.api.functional.JsonHelpers._
-import org.json4s.{CustomSerializer, DefaultFormats}
-import org.json4s.JsonAST.{JDouble, JArray, JObject, JField}
+import org.json4s.DefaultFormats
 
 class LocationToJsonTest extends FunSpec with ShouldMatchers {
 

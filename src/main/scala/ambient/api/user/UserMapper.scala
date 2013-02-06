@@ -10,7 +10,7 @@ class UserMapper {
     val first = doc.as[String]("first")
     val last = doc.as[String]("last")
     val fbid = doc.getAs[String]("fbid")
-    val location = reverse(doc.getAs[Seq[Double]]("location"))
+    val location = reverse(doc.getAs[Seq[Double]]("location")) // TODO pull out location mapper
 
     User(id, first, last, fbid, location)
   }
