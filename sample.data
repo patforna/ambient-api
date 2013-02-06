@@ -1,4 +1,5 @@
 db.users.ensureIndex({"location": "2d"})
+db.users.ensureIndex({"fbid" : 1}, {"unique" : true})
 
 db.users.insert({first:'Patric', last:'Fornasier', fbid:"42", job:'Developer at Ambient', location:[-0.104514,51.554093]})
 db.users.insert({first:'Jae', last:'Lee', fbid:"142", job:'Developer at Forward', location:[-0.136677,51.537731]})

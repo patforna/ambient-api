@@ -23,10 +23,15 @@ class ControllerTest extends ScalatraSpec with HttpSupport {
       get("/test/nfe")(statusCode) should be(404)
     }
 
+    it("should 409 if a IllegalStateException was thrown") {
+      get("/test/ise")(statusCode) should be(409)
+    }
+
     it("should not contain a response body if response was not OK") {
       get("/test/iae")(_.body) should be('empty)
       get("/test/nsee")(_.body) should be('empty)
       get("/test/nfe")(_.body) should be('empty)
+      get("/test/ise")(_.body) should be('empty)
     }
 
   }
@@ -37,5 +42,6 @@ class TestController extends Controller {
   get("/iae") { throw new IllegalArgumentException }
   get("/nsee") { throw new NoSuchElementException }
   get("/nfe") { throw new NotFoundException }
+  get("/ise") { throw new IllegalStateException }
 }
 

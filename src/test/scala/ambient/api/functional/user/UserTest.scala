@@ -38,12 +38,24 @@ class UserTest extends FunctionalSpec {
 
   describe("creating a user") {
 
-    it("should create a user using (fb, first, last)") {
+    it("should create a user using (first, last, fbid)") {
       when(iCreateANewUser(USER))
       then(theUserShouldExists(USER))
       and(theUserShouldHaveBeenReturnedInTheResponse(USER))
     }
 
+    it("should 400 if one of (first, last, fbid) is missing") {
+      val required = Map(First -> "x", Last -> "y", Fbid -> "z")
+      post(UsersUri.params((required - First).toSeq:_*))(statusCode) should be (400)
+      post(UsersUri.params((required - Last).toSeq:_*))(statusCode) should be (400)
+      post(UsersUri.params((required - Fbid).toSeq:_*))(statusCode) should be (400)
+    }
+
+    it("should 409 if user with given fbid exists already") {
+      val user = Seq(First -> "x", Last -> "y", Fbid -> "z")
+      post(UsersUri.params(user:_*))
+      post(UsersUri.params(user:_*))(statusCode) should be (409)
+    }
   }
 
   def someUserExists(user: User): String = {
@@ -83,7 +95,6 @@ class UserTest extends FunctionalSpec {
   def theUserShouldHaveBeenReturnedInTheResponse(user: User) {
     theReturnedUserShouldHaveField(First, USER.first)
     theReturnedUserShouldHaveField(Last, USER.last)
-    theReturnedUserShouldHaveField(Fbid, USER.fbid.get)
   }
 
 }

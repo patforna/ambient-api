@@ -45,8 +45,8 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def thereAreSomeUsersInTheSystem {
-    insert(First -> "Marc", Last -> "Hofer", Keys.Location ->(-0.099392, 51.531974))
-    insert(First -> "Jae", Last -> "Lee", Keys.Location ->(-0.136677, 51.537731))
+    insert(First -> "Marc", Last -> "Hofer", Keys.Location ->(-0.099392, 51.531974), Fbid -> "1")
+    insert(First -> "Jae", Last -> "Lee", Keys.Location ->(-0.136677, 51.537731), Fbid -> "2")
   }
 
   private def aUserChecksIn(user: User, location: String) {

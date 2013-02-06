@@ -3,6 +3,7 @@ package ambient.api.user
 import com.mongodb.casbah.Imports._
 import ambient.api.platform.NotFoundException
 import ambient.api.config.Keys._
+import com.mongodb.MongoException.DuplicateKey
 
 class UserService(db: MongoDB, userMapper: UserMapper) {
 
@@ -10,7 +11,12 @@ class UserService(db: MongoDB, userMapper: UserMapper) {
 
   def create(user: User): User = {
     val doc: DBObject = Map(First -> user.first, Last -> user.last, Fbid -> user.fbid)
-    users.insert(doc)
+    try {
+      users.insert(doc, WriteConcern.JournalSafe)
+    }
+    catch {
+      case e: DuplicateKey => throw new IllegalStateException(e)
+    }
     userMapper.map(doc) // TODO unit test #maybe
   }
 
@@ -20,5 +26,7 @@ class UserService(db: MongoDB, userMapper: UserMapper) {
       case _ => throw new NotFoundException(s"Can't find user with fbid '$fbid'")
     }
   }
+
+
 
 }

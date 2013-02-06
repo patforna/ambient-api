@@ -8,6 +8,7 @@ import com.mongodb.casbah.Imports._
 import ambient.api.user.User
 import ambient.api.platform.NotFoundException
 import ambient.api.config.Keys._
+import com.mongodb.MongoException.DuplicateKey
 
 class UserServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfterEach {
 
@@ -42,6 +43,11 @@ class UserServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfterEac
     it("should return the created user") {
       val user = service.create(USER)
       service.search(USER.fbid.get).id should be (user.id)
+    }
+
+    it("should blow up if fbid already exists") {
+      service.create(USER)
+      intercept[IllegalStateException] { service.create(USER) }
     }
   }
 

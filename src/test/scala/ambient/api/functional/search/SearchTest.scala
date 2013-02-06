@@ -35,9 +35,9 @@ class SearchTest extends FunctionalSpec {
   }
 
   private def thereAreSomeUsersInTheSystem {
-    insert(First -> "Patric", Last -> "Fornasier", Keys.Location ->(-0.104514, 51.554093))
-    insert(First -> user.first, Last -> user.last, Keys.Location -> user.location)
-    insert(First -> "Marc", Last -> "Hofer", Keys.Location ->(-0.099392, 51.531974))
+    insert(First -> "Patric", Last -> "Fornasier", Keys.Location ->(-0.104514, 51.554093), Fbid -> "1")
+    insert(First -> user.first, Last -> user.last, Keys.Location -> user.location, Fbid -> "2")
+    insert(First -> "Marc", Last -> "Hofer", Keys.Location ->(-0.099392, 51.531974), Fbid -> "3")
   }
 
   private def iSearchForUsersNear(location: String) {

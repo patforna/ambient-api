@@ -6,8 +6,8 @@ import ambient.api.config.Keys._
 
 class UserTest extends FunSpec with ShouldMatchers {
 
-  val required = Map(First -> "FIRST", Last -> "LAST")
-  val optional = Map(Fbid -> "FBID")
+  val required = Map(First -> "FIRST", Last -> "LAST", Fbid -> "FBID")
+  val optional = Map()
 
   describe("creating a user from key/value pairs") {
 
@@ -23,10 +23,8 @@ class UserTest extends FunSpec with ShouldMatchers {
       intercept[NoSuchElementException] { User.from(required - Last) }
     }
 
-    it("shouldn't mind if optional fields (e.g. fbid) are missing") {
-      User.from(required) should be(User(None, "FIRST", "LAST", None, None))
+    it("should blow up if fbid is missing") {
+      intercept[NoSuchElementException] { User.from(required - Fbid) }
     }
-
   }
-
 }
