@@ -22,11 +22,11 @@ class UserMapperTest extends FunSpec with ShouldMatchers {
   describe("map to user") {
 
     it("should construct a user") {
-      mapper.map(Required ++ Optional) should be(User(Some(Id), Some(Fbid), First, Last, Some(Location(Lat, Long))))
+      mapper.map(Required ++ Optional) should be(User(Some(Id), First, Last, Some(Fbid), Some(Location(Lat, Long))))
     }
 
     it("shouldn't mind if optional fields are missing") {
-      mapper.map(Required) should be(User(Some(Id), None, First, Last, None))
+      mapper.map(Required) should be(User(Some(Id), First, Last, None, None))
     }
 
     it("should blow up if id is missing") {

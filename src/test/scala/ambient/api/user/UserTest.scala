@@ -11,7 +11,7 @@ class UserTest extends FunSpec with ShouldMatchers {
   describe("creating a user from key/value pairs") {
 
     it("should populate first, last and fbid fields") {
-      User.from(required ++ optional) should be(User(None, Some("fbid"), "first", "last", None))
+      User.from(required ++ optional) should be(User(None, "first", "last", Some("fbid"), None))
     }
 
     it("should blow up if first name is missing") {
@@ -23,7 +23,7 @@ class UserTest extends FunSpec with ShouldMatchers {
     }
 
     it("shouldn't mind if optional fields (e.g. fbid) are missing") {
-      User.from(required) should be(User(None, None, "first", "last", None))
+      User.from(required) should be(User(None, "first", "last", None, None))
     }
 
   }

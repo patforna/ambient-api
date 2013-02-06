@@ -12,7 +12,7 @@ class UserMapper {
     val fbid = doc.getAs[String]("fbid")
     val location = reverse(doc.getAs[Seq[Double]]("location"))
 
-    User(id, fbid, first, last, location)
+    User(id, first, last, fbid, location)
   }
 
   private def reverse(location: Option[Seq[Double]]): Option[Location] = location match {

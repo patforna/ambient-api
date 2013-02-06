@@ -10,7 +10,7 @@ import ambient.api.location.Location
 
 class SearchTest extends FunctionalSpec {
 
-  val user = User(None, None, "Jae", "Lee", Some(Location(-0.136677, 51.537731)))
+  val user = User(None, "Jae", "Lee", None, Some(Location(-0.136677, 51.537731)))
 
   implicit val collection = db("users")
 
