@@ -9,7 +9,7 @@ object User {
 
   def apply(first: String, last: String, fbid: String): User = User(None, Some(fbid), first, last, None)
 
-  def from(map: Map[String, String]): User = User(None, Some(map("fbid")), map("first"), map("last"), None) // TODO unit test
+  def from(map: Map[String, String]): User = User(None, map.get("fbid"), map("first"), map("last"), None)
 
 }
 
