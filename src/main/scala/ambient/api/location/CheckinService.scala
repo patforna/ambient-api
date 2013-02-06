@@ -18,6 +18,6 @@ class CheckinService(db: MongoDB) {
 
   def checkin(user: User, location: Location) {
     users.update(Map(First -> user.first, Last -> user.last), $set(List(Keys.Location ->(location.longitude, location.latitude))))
-    checkins.insert(Map(First -> user.first, Last -> user.last, Keys.Location -> List(location.longitude, location.latitude), "time" -> DateTime.now))      // FIXME use user.id
+    checkins.insert(Map(First -> user.first, Last -> user.last, Keys.Location -> List(location.longitude, location.latitude), "time" -> DateTime.now)) // FIXME use user id
   }
 }

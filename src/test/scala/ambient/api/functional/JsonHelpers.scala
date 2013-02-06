@@ -17,7 +17,4 @@ object JsonHelpers {
 
   def serialize(anything: AnyRef): String = write(anything)
 
-  @deprecated
-  def toJValue(obj: Any): JValue = JObjectParser.serialize(obj)(DefaultFormats) // FIXME get rid
-
 }

@@ -36,7 +36,7 @@ class CheckinTest extends FunctionalSpec {
 
       when(aUserChecksIn(Jae, "1,0"))
       //      when(aUserChecksIn("Marc Hofer", "1,0")) // FIXME add when we've implemented a way to distinguish users
-      //      when(aUserChecksIn("Marc Hofer", "2,0")) // FIXME add when we've implemented a way to distinguish users
+      //      when(aUserChecksIn("Marc Hofer", "2,0"))
       when(aUserChecksIn(Jae, "2,0"))
       when(aUserChecksIn(Jae, "3,0"))
 
@@ -50,8 +50,7 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def aUserChecksIn(user: User, location: String) {
-    // FIXME use user once FB login is implemented
-    val response: ClientResponse = post(CheckinsUri.params(Keys.Location -> location))
+    val response: ClientResponse = post(CheckinsUri.params(Keys.Location -> location)) // FIXME use user id
     response.status should be(200)
     response.body should be('empty)
   }

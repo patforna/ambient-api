@@ -7,10 +7,21 @@ object Location {
   private val VALUE = SPACES + DOUBLE + SPACES
 	private val LOCATION_PATTERN = (VALUE + "," + VALUE).r
 
-	def apply(value: String): Location = value match {
+	def apply(input: String): Location = input match {
 		case LOCATION_PATTERN(lat, long) => Location(lat.toDouble, long.toDouble)
-		case _ => throw new IllegalArgumentException(s"'$value' does not appear to be a valid location")
+		case _ => throw new IllegalArgumentException(s"'$input' does not appear to be a valid location")
 	}
+
+  def apply(input: Option[Seq[Double]]): Option[Location] = input match {
+    case Some(x) => Some(Location(x, reverse = true))
+    case _ => None
+  }
+
+  def apply(input: Seq[Double], reverse: Boolean = true): Location = input match {
+    case (Seq(long, lat)) if reverse => Location(lat, long)
+    case (Seq(lat, long)) if !reverse => Location(lat, long)
+    case _ => throw new IllegalArgumentException(s"'$input' does not appear to contain exactly two elements")
+  }
 }
 
 case class Location(latitude: Double, longitude: Double) {

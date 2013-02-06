@@ -11,12 +11,12 @@ class UserService(db: MongoDB, userMapper: UserMapper) {
   def create(user: User): User = {
     val doc: DBObject = Map(First -> user.first, Last -> user.last, Fbid -> user.fbid)
     users.insert(doc)
-    userMapper.map(doc) // TODO unit test
+    userMapper.map(doc) // TODO unit test #maybe
   }
 
   def search(fbid: String): User = {
     users.findOne(Map(Fbid -> fbid)) match {
-      case Some(doc) => userMapper.map(doc) // TODO unit test
+      case Some(doc) => userMapper.map(doc) // TODO unit test #maybe
       case _ => throw new NotFoundException(s"Can't find user with fbid '$fbid'")
     }
   }

@@ -31,8 +31,11 @@ class CheckinServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfter
   describe("checkin") {
     it("should update a users location (and reverse lat/long to keep mongo happy)") {
       val id = insert(First -> USER.first, Last -> USER.last, Keys.Location ->(0, 0))
+
       service.checkin(USER, LOCATION)
-      (findOneById(id) \ Keys.Location).values should be(List(LOCATION.longitude, LOCATION.latitude)) // FIXME no need to use json here
+
+      val location = collection.findOneByID(id) map { x => Location(x.as[Seq[Double]](Keys.Location)) }
+      location.get should be(LOCATION)
     }
 
     it("should maintain a history of checkins") {
@@ -44,8 +47,7 @@ class CheckinServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfter
       service.checkin(USER, LOCATION_THREE)
 
       val results = checkins.find(Map(First -> USER.first, Last -> USER.last)).sort(Map("timestamp" -> -1)).toList
-      val locations = results map { _.as[MongoDBList](Keys.Location) } map { loc => Location((loc(1)).asInstanceOf[Double], ((loc(0)).asInstanceOf[Double])) }
-
+      val locations = results map { x => Location(x.as[Seq[Double]](Keys.Location)) }
       locations should be(List(LOCATION, LOCATION_THREE))
     }
 

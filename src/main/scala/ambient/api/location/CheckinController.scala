@@ -7,7 +7,7 @@ import ambient.api.config.Keys
 class CheckinController(service: CheckinService) extends Controller with PrettyJsonSupport {
 
   post("/") {
-    val user = User("Jae", "Lee") // FIXME
+    val user = User("Jae", "Lee") // FIXME use user id
     val location = Location(params(Keys.Location))
     service.checkin(user, location)
   }
