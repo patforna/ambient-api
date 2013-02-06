@@ -5,40 +5,43 @@ import org.scalatest.matchers.ShouldMatchers
 import com.mongodb.casbah.Imports._
 import com.mongodb.casbah.commons.TypeImports.ObjectId
 import ambient.api.location.Location
+import ambient.api.config.Keys
+import ambient.api.config.Keys._
+
 
 class UserMapperTest extends FunSpec with ShouldMatchers {
 
-  val Id = "507f1f77bcf86cd799439011"
-  val First = "*first*"
-  val Last = "*last*"
-  val Fbid = "*fbid"
-  val Lat = 1.0
-  val Long = 2.0
-  val Required = Map("_id" -> new ObjectId(Id), "first" -> First, "last" -> Last)
-  val Optional = Map("fbid" -> Fbid, "location" -> MongoDBList(Long, Lat))
+  val id = "507f1f77bcf86cd799439011"
+  val first = "*first*"
+  val last = "*last*"
+  val fbid = "*fbid"
+  val lat = 1.0
+  val long = 2.0
+  val req = Map(Id -> new ObjectId(id), First -> first, Last -> last)
+  val opt = Map(Fbid -> fbid, Keys.Location -> MongoDBList(long, lat))
 
   val mapper = new UserMapper
 
   describe("map to user") {
 
     it("should construct a user") {
-      mapper.map(Required ++ Optional) should be(User(Some(Id), First, Last, Some(Fbid), Some(Location(Lat, Long))))
+      mapper.map(req ++ opt) should be(User(Some(id), first, last, Some(fbid), Some(Location(lat, long))))
     }
 
     it("shouldn't mind if optional fields are missing") {
-      mapper.map(Required) should be(User(Some(Id), First, Last, None, None))
+      mapper.map(req) should be(User(Some(id), first, last, None, None))
     }
 
     it("should blow up if id is missing") {
-      intercept[NoSuchElementException] { mapper.map(Required - "_id") }
+      intercept[NoSuchElementException] { mapper.map(req - Id) }
     }
 
     it("should blow up if first name is missing") {
-      intercept[NoSuchElementException] { mapper.map(Required - "first") }
+      intercept[NoSuchElementException] { mapper.map(req - First) }
     }
 
     it("should blow up if last name is missing") {
-      intercept[NoSuchElementException] { mapper.map(Required - "last") }
+      intercept[NoSuchElementException] { mapper.map(req - Last) }
     }
   }
 }

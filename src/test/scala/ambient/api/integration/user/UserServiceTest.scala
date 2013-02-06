@@ -7,6 +7,7 @@ import ambient.api.functional.MongoHelpers._
 import com.mongodb.casbah.Imports._
 import ambient.api.user.User
 import ambient.api.platform.NotFoundException
+import ambient.api.config.Keys._
 
 class UserServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfterEach {
 
@@ -20,7 +21,7 @@ class UserServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfterEac
 
   describe("finding a user") {
     it("should find a user by her facebook id (fbid)") {
-      val id = insert("first" -> USER.first, "last" -> USER.last, "fbid" -> USER.fbid.get)
+      val id = insert(First -> USER.first, Last -> USER.last, Fbid -> USER.fbid.get)
       val user = service.search(USER.fbid.get)
       user.id.get should be(id.toString)
     }

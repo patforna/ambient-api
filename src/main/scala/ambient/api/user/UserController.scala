@@ -1,6 +1,7 @@
 package ambient.api.user
 
 import ambient.api.web.{PrettyJsonSupport, Controller}
+import ambient.api.config.Keys.Fbid
 
 class UserController(service: UserService) extends Controller with PrettyJsonSupport {
 
@@ -9,7 +10,7 @@ class UserController(service: UserService) extends Controller with PrettyJsonSup
   }
 
   get("/search") {
-    val fbid = params("fbid")
+    val fbid = params(Fbid)
     Map("user" -> service.search(fbid))
   }
 

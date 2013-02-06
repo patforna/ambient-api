@@ -9,6 +9,8 @@ import org.scalatra.test.ClientResponse
 import com.mongodb.casbah.Imports._
 import ambient.api.location.Location
 import ambient.api.user.User
+import ambient.api.config.Keys
+import ambient.api.config.Keys._
 
 class CheckinTest extends FunctionalSpec {
 
@@ -43,13 +45,13 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def thereAreSomeUsersInTheSystem {
-    insert("first" -> "Marc", "last" -> "Hofer", "location" ->(-0.099392, 51.531974))
-    insert("first" -> "Jae", "last" -> "Lee", "location" ->(-0.136677, 51.537731))
+    insert(First -> "Marc", Last -> "Hofer", Keys.Location ->(-0.099392, 51.531974))
+    insert(First -> "Jae", Last -> "Lee", Keys.Location ->(-0.136677, 51.537731))
   }
 
   private def aUserChecksIn(user: User, location: String) {
     // FIXME use user once FB login is implemented
-    val response: ClientResponse = post(CheckinsUri.params("location" -> location))
+    val response: ClientResponse = post(CheckinsUri.params(Keys.Location -> location))
     response.status should be(200)
     response.body should be('empty)
   }
@@ -60,7 +62,7 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def iSearchForUsersNear(location: String) {
-    get(SearchNearbyUri.params("location" -> location))(asJson)
+    get(SearchNearbyUri.params(Keys.Location -> location))(asJson)
   }
 
   private def theResponseShouldInclude(s: String) { // FIXME this is duplicated from SearchTest (move into steps)
@@ -70,8 +72,8 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def theUsersCheckinHistoryShouldBe(user: User, locations: List[String]) {
-    val results = checkins.find(Map("first" -> user.first, "last" -> user.last)).sort(Map("timestamp" -> -1)).toList
-    val actual = results map { _.as[MongoDBList]("location") } map { loc => Location((loc(1)).asInstanceOf[Double], ((loc(0)).asInstanceOf[Double])) }
+    val results = checkins.find(Map(First -> user.first, Last -> user.last)).sort(Map("timestamp" -> -1)).toList
+    val actual = results map { _.as[MongoDBList](Keys.Location) } map { loc => Location((loc(1)).asInstanceOf[Double], ((loc(0)).asInstanceOf[Double])) }
 
     val expected = locations map { Location(_) }
     actual should be(expected)

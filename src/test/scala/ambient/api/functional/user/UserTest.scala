@@ -6,6 +6,7 @@ import ambient.api.functional.MongoHelpers._
 import ambient.api.functional.Uri._
 import ambient.api.user.User
 import ambient.api.functional.JsonHelpers._
+import ambient.api.config.Keys._
 
 class UserTest extends FunctionalSpec {
 
@@ -30,7 +31,7 @@ class UserTest extends FunctionalSpec {
     }
 
     it("should return 404 if no user with given Facebook id found") {
-      get(UsersSearchUri.params("fbid" -> "does-not-exist"))(statusCode) should be(404)
+      get(UsersSearchUri.params(Fbid -> "does-not-exist"))(statusCode) should be(404)
     }
 
   }
@@ -46,7 +47,7 @@ class UserTest extends FunctionalSpec {
   }
 
   def someUserExists(user: User): String = {
-    someUserExists("first" -> user.first, "last" -> user.last, "fbid" -> user.fbid)
+    someUserExists(First -> user.first, Last -> user.last, Fbid -> user.fbid)
   }
 
   def someUserExists(keyValues: (String, Any)*): String = {
@@ -54,7 +55,7 @@ class UserTest extends FunctionalSpec {
   }
 
   def iSearchForUserWithFbId(fbid: String) {
-    get(UsersSearchUri.params("fbid" -> fbid))(asJson)
+    get(UsersSearchUri.params(Fbid -> fbid))(asJson)
   }
 
   def theReturnedUserShouldHaveId(id: String) {
@@ -66,7 +67,7 @@ class UserTest extends FunctionalSpec {
   }
 
   def iCreateANewUser(user: User) {
-    iCreateANewUser("first" -> user.first, "last" -> user.last, "fbid" -> user.fbid.get)
+    iCreateANewUser(First -> user.first, Last -> user.last, Fbid -> user.fbid.get)
   }
 
   def iCreateANewUser(keyValues: (String, Any)*) {
@@ -75,14 +76,14 @@ class UserTest extends FunctionalSpec {
 
   def theUserShouldExists(user: User) {
     iSearchForUserWithFbId(user.fbid.get)
-    theReturnedUserShouldHaveField("first", user.first)
-    theReturnedUserShouldHaveField("last", user.last)
+    theReturnedUserShouldHaveField(First, user.first)
+    theReturnedUserShouldHaveField(Last, user.last)
   }
 
   def theUserShouldHaveBeenReturnedInTheResponse(user: User) {
-    theReturnedUserShouldHaveField("first", USER.first)
-    theReturnedUserShouldHaveField("last", USER.last)
-    theReturnedUserShouldHaveField("fbid", USER.fbid.get)
+    theReturnedUserShouldHaveField(First, USER.first)
+    theReturnedUserShouldHaveField(Last, USER.last)
+    theReturnedUserShouldHaveField(Fbid, USER.fbid.get)
   }
 
 }

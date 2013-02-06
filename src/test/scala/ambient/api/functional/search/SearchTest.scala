@@ -7,6 +7,8 @@ import ambient.api.functional.JsonHelpers._
 import ambient.api.functional.Uri._
 import ambient.api.user.User
 import ambient.api.location.Location
+import ambient.api.config.Keys._
+import ambient.api.config.Keys
 
 class SearchTest extends FunctionalSpec {
 
@@ -21,25 +23,25 @@ class SearchTest extends FunctionalSpec {
   describe("search nearby") {
     it("should bark if no or invalid location has been specified") {
       get(SearchNearbyUri)(statusCode) should be(400)
-      get(SearchNearbyUri.params("location" -> ""))(statusCode) should be(400)
-      get(SearchNearbyUri.params("location" -> "foo,bar"))(statusCode) should be(400)
+      get(SearchNearbyUri.params(Keys.Location -> ""))(statusCode) should be(400)
+      get(SearchNearbyUri.params(Keys.Location -> "foo,bar"))(statusCode) should be(400)
     }
 
     it("should find nearby users") {
       given(thereAreSomeUsersInTheSystem)
       when(iSearchForUsersNear("51.515874,-0.125613"))
-      `then`(theResponseShouldInclude(""" { "user" : { "first" : "Jae", "last": "Lee", "location": [51.537731, -0.136677] }, "distance" : 2550 }  """))
+      `then`(theResponseShouldInclude( """ { "user" : { "first" : "Jae", "last": "Lee", "location": [51.537731, -0.136677] }, "distance" : 2550 }  """))
     }
   }
 
   private def thereAreSomeUsersInTheSystem {
-    insert("first" -> "Patric", "last" -> "Fornasier", "location" ->(-0.104514, 51.554093))
-    insert("first" -> user.first, "last" -> user.last, "location" -> user.location)
-    insert("first" -> "Marc", "last" -> "Hofer", "location" ->(-0.099392, 51.531974))
+    insert(First -> "Patric", Last -> "Fornasier", Keys.Location ->(-0.104514, 51.554093))
+    insert(First -> user.first, Last -> user.last, Keys.Location -> user.location)
+    insert(First -> "Marc", Last -> "Hofer", Keys.Location ->(-0.099392, 51.531974))
   }
 
   private def iSearchForUsersNear(location: String) {
-    get(SearchNearbyUri.params("location" -> location))(asJson)
+    get(SearchNearbyUri.params(Keys.Location -> location))(asJson)
   }
 
   private def theResponseShouldInclude(s: String) {

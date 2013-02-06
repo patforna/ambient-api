@@ -7,6 +7,8 @@ import ambient.api.location.Location
 import ambient.api.functional.MongoHelpers._
 import ambient.api.user.User
 import com.mongodb.casbah.Imports._
+import ambient.api.config.Keys
+import ambient.api.config.Keys._
 
 class CheckinServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfterEach {
 
@@ -28,21 +30,21 @@ class CheckinServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfter
 
   describe("checkin") {
     it("should update a users location (and reverse lat/long to keep mongo happy)") {
-      val id = insert("first" -> USER.first, "last" -> USER.last, "location" ->(0, 0))
+      val id = insert(First -> USER.first, Last -> USER.last, Keys.Location ->(0, 0))
       service.checkin(USER, LOCATION)
-      (findOneById(id) \ "location").values should be(List(LOCATION.longitude, LOCATION.latitude)) // FIXME no need to use json here
+      (findOneById(id) \ Keys.Location).values should be(List(LOCATION.longitude, LOCATION.latitude)) // FIXME no need to use json here
     }
 
     it("should maintain a history of checkins") {
-      insert("first" -> USER.first, "last" -> USER.last)
-      insert("first" -> ANOTHER_USER.first, "last" -> ANOTHER_USER.last)
+      insert(First -> USER.first, Last -> USER.last)
+      insert(First -> ANOTHER_USER.first, Last -> ANOTHER_USER.last)
 
       service.checkin(USER, LOCATION)
       service.checkin(ANOTHER_USER, LOCATION_TWO)
       service.checkin(USER, LOCATION_THREE)
 
-      val results = checkins.find(Map("first" -> USER.first, "last" -> USER.last)).sort(Map("timestamp" -> -1)).toList
-      val locations = results map { _.as[MongoDBList]("location") } map { loc => Location((loc(1)).asInstanceOf[Double], ((loc(0)).asInstanceOf[Double])) }
+      val results = checkins.find(Map(First -> USER.first, Last -> USER.last)).sort(Map("timestamp" -> -1)).toList
+      val locations = results map { _.as[MongoDBList](Keys.Location) } map { loc => Location((loc(1)).asInstanceOf[Double], ((loc(0)).asInstanceOf[Double])) }
 
       locations should be(List(LOCATION, LOCATION_THREE))
     }
