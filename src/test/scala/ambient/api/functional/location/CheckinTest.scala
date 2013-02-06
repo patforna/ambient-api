@@ -8,16 +8,19 @@ import ambient.api.functional.Uri._
 import org.scalatra.test.ClientResponse
 import com.mongodb.casbah.Imports._
 import ambient.api.location.Location
-import ambient.api.user.User
 import ambient.api.config.Keys
 import ambient.api.config.Keys._
+import util.Random
 
 class CheckinTest extends FunctionalSpec {
 
-  private implicit val collection = db("users")
-  private val checkins = db("checkins")
+  implicit val collection = db("users")
 
-  private val Jae = User("Jae", "Lee")
+  val checkins = db("checkins")
+
+  val userId = new ObjectId().toString
+
+  val anotherUserId = new ObjectId().toString
 
   override def beforeEach() {
     clearCollection()
@@ -26,52 +29,52 @@ class CheckinTest extends FunctionalSpec {
 
   describe("check in") {
     it("should update the location of the user who checks in") {
-      given(thereAreSomeUsersInTheSystem)
-      when(aUserChecksIn(Jae, "42.2,18.8"))
-      `then`(theUsersLocationShouldHaveBeenUpdatedTo(Jae, "42.2,18.8"))
+      given(aUserWith(userId))
+      and(aUserWith(anotherUserId))
+      when(aUserChecksIn(userId, "42.2,18.8"))
+      `then`(theUsersLocationShouldHaveBeenUpdatedTo(userId, "42.2,18.8"))
     }
 
     it("should maintain a history of all checkins") {
-      given(thereAreSomeUsersInTheSystem)
+      given(aUserWith(userId))
+      and(aUserWith(anotherUserId))
 
-      when(aUserChecksIn(Jae, "1,0"))
-      //      when(aUserChecksIn("Marc Hofer", "1,0")) // FIXME add when we've implemented a way to distinguish users
-      //      when(aUserChecksIn("Marc Hofer", "2,0"))
-      when(aUserChecksIn(Jae, "2,0"))
-      when(aUserChecksIn(Jae, "3,0"))
+      when(aUserChecksIn(userId, "1,0"))
+      when(aUserChecksIn(anotherUserId, "1,0"))
+      when(aUserChecksIn(anotherUserId, "2,0"))
+      when(aUserChecksIn(userId, "2,0"))
+      when(aUserChecksIn(userId, "3,0"))
 
-      `then`(theUsersCheckinHistoryShouldBe(Jae, List("1,0", "2,0", "3,0")))
+      `then`(theUsersCheckinHistoryShouldBe(userId, List("1,0", "2,0", "3,0")))
     }
+
+    it("should 404 if userid missing") { pending }
+
+    it("should 404 if location missing") { pending }
   }
 
-  private def thereAreSomeUsersInTheSystem {
-    insert(First -> "Marc", Last -> "Hofer", Keys.Location ->(-0.099392, 51.531974), Fbid -> "1")
-    insert(First -> "Jae", Last -> "Lee", Keys.Location ->(-0.136677, 51.537731), Fbid -> "2")
+  private def aUserWith(id: String) {
+    insert(Id -> new ObjectId(id), First -> "Marc", Last -> "Random", Keys.Location ->(-0.099392, 51.531974), Fbid -> Random.nextInt.toString) // TODO could do with a UserDocBuilder
   }
 
-  private def aUserChecksIn(user: User, location: String) {
-    val response: ClientResponse = post(CheckinsUri.params(Keys.Location -> location)) // FIXME use user id
+  private def aUserChecksIn(id: String, location: String) {
+    val response: ClientResponse = post(CheckinsUri.params(UserId -> id, Keys.Location -> location))
     response.status should be(200)
     response.body should be('empty)
   }
 
-  private def theUsersLocationShouldHaveBeenUpdatedTo(user: User, location: String) {
+  private def theUsersLocationShouldHaveBeenUpdatedTo(userId: String, location: String) {
+    val Array(lat, long) = location.split(",")
     iSearchForUsersNear(location)
-    theResponseShouldInclude( s""" { "user" : { "first" : "${user.first}", "last" : "${user.last}", "location" : [$location]}, "distance" : 0 }  """)
+    ((responseJson \ "nearby")(0) \\ "location").extract[List[Double]] should be (List(lat.toDouble, long.toDouble))
   }
 
   private def iSearchForUsersNear(location: String) {
     get(SearchNearbyUri.params(Keys.Location -> location))(asJson)
   }
 
-  private def theResponseShouldInclude(s: String) { // FIXME this is duplicated from SearchTest (move into steps)
-    val ignore = List("id")
-    val nearby = (responseJson \ "nearby")(0).removeField { case (k, _) => ignore.contains(k) }
-    json(nearby) should include(json(s))
-  }
-
-  private def theUsersCheckinHistoryShouldBe(user: User, locations: List[String]) {
-    val results = checkins.find(Map(First -> user.first, Last -> user.last)).sort(Map("timestamp" -> -1)).toList
+  private def theUsersCheckinHistoryShouldBe(userId: String, locations: List[String]) {
+    val results = checkins.find(Map(UserId -> new ObjectId(userId))).toList
     val actual = results map { _.as[MongoDBList](Keys.Location) } map { loc => Location((loc(1)).asInstanceOf[Double], ((loc(0)).asInstanceOf[Double])) }
 
     val expected = locations map { Location(_) }
