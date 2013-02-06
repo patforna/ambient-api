@@ -5,6 +5,7 @@ import ambient.api.functional.FunctionalSpec
 import ambient.api.functional.MongoHelpers._
 import ambient.api.functional.Uri._
 import ambient.api.user.User
+import ambient.api.functional.JsonHelpers._
 
 class UserTest extends FunctionalSpec {
 

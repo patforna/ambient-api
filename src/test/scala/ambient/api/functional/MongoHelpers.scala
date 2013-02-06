@@ -31,5 +31,5 @@ object MongoHelpers {
   }
 
   // FIXME: no need to use json here
-  def findOneById(id: AnyRef)(implicit collection: MongoCollection): JValue = serialize(collection.findOneByID(id).get)
+  def findOneById(id: AnyRef)(implicit collection: MongoCollection): JValue = toJValue(collection.findOneByID(id).get)
 }

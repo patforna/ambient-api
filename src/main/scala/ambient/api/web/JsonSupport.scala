@@ -1,12 +1,11 @@
 package ambient.api.web
 
 import org.scalatra.json.JacksonJsonSupport
-import org.json4s.DefaultFormats
-import ambient.api.location.LocationSerializer
+import ambient.api.config.JsonFormats
 
 trait JsonSupport extends JacksonJsonSupport {
 
-  protected implicit val jsonFormats = DefaultFormats + new LocationSerializer
+  protected implicit val jsonFormats = JsonFormats.default
 
   before() {
     contentType = formats("json")
