@@ -13,18 +13,33 @@ Here's what you need on your workstation:
         rvm use 1.9.3
 
 * Homebrew
-        
+
         ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
 
 * A bunch of other packages
 
         brew install git
         brew install scala --with-docs
-        brew install mongo
+        brew install mongo && mongod &
         gem install heroku-toolbelt
         gem install foreman
         gem install cocoapods && pod setup
 
+## Building
+
+Make sure you've got Mongo running, and just execute:
+
+         rake
+
+## Deploying to Heroku
+
+In order to be able to push to Heroku, you need to add it as a remote repo to your git config:
+
+        heroku git:remote -a ambient-api
+
+Given you've been granted the apropriate permissions, you can then deploy the app:
+
+        rake deploy
 
 ## JRebel (optional)
 
