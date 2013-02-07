@@ -22,6 +22,8 @@ class CheckinTest extends FunctionalSpec {
 
   val anotherUserId = new ObjectId().toString
 
+  val required = Map(UserId -> userId, Keys.Location -> "1.0,2.0")
+
   override def beforeEach() {
     clearCollection()
     clearCollection()(checkins)
@@ -48,9 +50,13 @@ class CheckinTest extends FunctionalSpec {
       `then`(theUsersCheckinHistoryShouldBe(userId, List("1,0", "2,0", "3,0")))
     }
 
-    it("should 404 if userid missing") { pending }
+    it("should 400 if userid missing") {
+      post(CheckinsUri.params((required - UserId).toSeq:_*))(statusCode) should be (400)
+    }
 
-    it("should 404 if location missing") { pending }
+    it("should 400 if location missing") {
+      post(CheckinsUri.params((required - Keys.Location).toSeq:_*))(statusCode) should be (400)
+    }
   }
 
   private def aUserWith(id: String) {
