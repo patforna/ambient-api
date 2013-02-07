@@ -4,45 +4,57 @@ HOST: http://api.discoverambient.com
 
 -- User --
 Returns the user with the given facebook id.
-Other: 400, 404
-GET /users/search?fb=:string
+400: if fbid is missing
+404: if no user with fbid is found
+GET /users/search?fbid=:string
 < 200
 < Content-Type: application/json
 {
   "user" : {
-    "id" : "123",
-    "name" : "Stefan Fazzlar"
+    "id" : "511371ad57259eff0637a8da",
+    "first" : "Patric",
+    "last" : "Fornasier",
+    "location" : [ 51.554093, -0.104514 ]
   }
 }
 
 Creates a new user. The newly created user.
-Other; 400, 409
-POST /users?fb=:string&first=:string&last=:string
+400: if first, last or fbid is missing
+409: if user with fbid exists already
+POST /users?first=:string&last=:string&fbid=:string
 < 200
 < Content-Type: application/json
 {
   "user" : {
-    "id" : "123",
-    "name" : "Stefan Fazzlar"
+    "id" : "511371ad57259eff0637a8da",
+    "first" : "Patric",
+    "last" : "Fornasier",
+    "location" : [ 51.554093, -0.104514 ]
   }
 }
 
 
 -- Nearby/Search --
 Returns a collection of (user, distance) tuples.
-Other: 400
+400: if location is missing
 GET /search/nearby?location=:double,double
 < 200
 < Content-Type: application/json
 {
   "nearby" : [ {
     "user" : {
-      "name" : "Marc Hofer"
+      "id" : "511371ae57259eff0637a8dc",
+      "first" : "Marc",
+      "last" : "Hofer",
+      "location" : [ 51.531974, -0.099392 ]
     },
     "distance" : 2003
   }, {
     "user" : {
-      "name" : "Jae Lee"
+      "id" : "511371ae57259eff0637a8db",
+      "first" : "Jae",
+      "last" : "Lee",
+      "location" : [ 51.537731, -0.136677 ]
     },
     "distance" : 4585
   } ]
@@ -51,7 +63,7 @@ GET /search/nearby?location=:double,double
 
 -- Checkins --
 Creates a new checkin. Returns nothing.
-Other: 400
-POST /checkins?location=:double,double
+400: if user_id or location is missing
+POST /checkins?user_id=:string&location=:double,double
 < 200
 < Content-Type: application/json
