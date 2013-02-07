@@ -41,6 +41,10 @@ Given you've been granted the apropriate permissions, you can then deploy the ap
 
         rake deploy
 
+## Facebook SDK API Reference (optional)
+
+In order to get access to the Facebook SDK docs from within XCode, [download and install the SDK](https://developers.facebook.com/ios/).
+
 ## JRebel (optional)
 
 JRebel can be set up with sbt so that code changes can be reloaded without server restarts.
