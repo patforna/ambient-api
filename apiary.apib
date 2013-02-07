@@ -64,6 +64,6 @@ GET /search/nearby?location=:double,double
 -- Checkins --
 Creates a new checkin. Returns nothing.
 400: if user_id or location is missing
-POST /checkins?user_id=:string&location=:double,double
+POST /checkins?userId=:string&location=:double,double
 < 200
 < Content-Type: application/json
