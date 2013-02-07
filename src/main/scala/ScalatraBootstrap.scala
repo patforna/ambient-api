@@ -7,6 +7,5 @@ class ScalatraBootstrap extends LifeCycle {
     context.mount(searchController, "/search/*")
     context.mount(checkinController, "/checkins")
     context.mount(userController, "/users")
-    context.mount(skeletonController, "/*")
   }
 }
