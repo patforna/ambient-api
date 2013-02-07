@@ -3,7 +3,7 @@ package ambient.api.location
 object Location {
 
   private val SPACES = "\\s*"
-  private val DOUBLE = "(-?\\d+(?:\\.\\d+)?)"
+  private val DOUBLE = "(-?\\+?\\d+(?:\\.\\d+)?)"
   private val VALUE = SPACES + DOUBLE + SPACES
 	private val LOCATION_PATTERN = (VALUE + "," + VALUE).r
 

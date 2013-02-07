@@ -22,6 +22,10 @@ class LocationTest extends FunSpec with ShouldMatchers {
       Location("42.0123,8.9876") should be(Location(42.0123, 8.9876))
       Location("13.01,10.2") should be(Location(13.01, 10.2))
       Location("13,10") should be(Location(13, 10))
+      Location("+42.0123,+8.9876") should be(Location(42.0123, 8.9876))
+      Location("+42.0123,-8.9876") should be(Location(42.0123, -8.9876))
+      Location("-42.0123,+8.9876") should be(Location(-42.0123, 8.9876))
+      Location("-42.0123,-8.9876") should be(Location(-42.0123, -8.9876))
       Location("0,-0") should be(Location(0, 0))
     }
 
@@ -42,6 +46,7 @@ class LocationTest extends FunSpec with ShouldMatchers {
       intercept[IllegalArgumentException](Location("a,b"))
       intercept[IllegalArgumentException](Location(","))
       intercept[IllegalArgumentException](Location("90.1,0"))
+      intercept[IllegalArgumentException](Location("+-20,0"))
     }
   }
 
