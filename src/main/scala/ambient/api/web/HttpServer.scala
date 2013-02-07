@@ -7,7 +7,7 @@ import ambient.api.platform.Logger
 
 class HttpServer(port: Int) extends Logger {
 
-  private val WebappDir = "webapp"
+  private val WebappDir = "./webapp"
 
   private val server = new Server(port)
   server.setHandler(handler)
