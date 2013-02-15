@@ -7,10 +7,6 @@ import ambient.api.config.Keys
 
 object User {
 
-  def apply(first: String, last: String): User = User(None, first, last, None, None, None)
-
-  def apply(first: String, last: String, fbid: String): User = User(None, first, last, Some(fbid), None, None)
-
   def from(params: Map[String, String]): User = User(None, params(First), params(Last), Some(params(Fbid)), None, Some(params(Picture)))
 
 }

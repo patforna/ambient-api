@@ -4,7 +4,7 @@ import org.scalatest.{OneInstancePerTest, FunSpec}
 import org.scalatest.matchers.ShouldMatchers
 import com.mongodb.casbah.MongoDB
 import ambient.api.location.Location
-import ambient.api.user.User
+import ambient.api.user.{UserBuilder, User}
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Matchers._
 
@@ -13,7 +13,7 @@ import com.mongodb.{CommandResult, DBObject}
 
 class SearchServiceTest extends FunSpec with ShouldMatchers with OneInstancePerTest with MockitoSugar {
 
-  private val NEARBY_USERS = List(Nearby(User("Foo", "Bar"), distance = 42))
+  private val NEARBY_USERS = List(Nearby(UserBuilder().build, 42))
   private val RESULT = mock[CommandResult]
 
   private val db = mock[MongoDB]

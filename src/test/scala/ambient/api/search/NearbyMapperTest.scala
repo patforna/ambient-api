@@ -3,7 +3,7 @@ package ambient.api.search
 import org.scalatest.{BeforeAndAfterEach, OneInstancePerTest, FunSpec}
 import org.scalatest.matchers.ShouldMatchers
 
-import ambient.api.user.{UserMapper, User}
+import ambient.api.user.{UserBuilder, UserMapper, User}
 import com.mongodb.casbah.Imports._
 
 import org.scalatest.mock.MockitoSugar
@@ -14,7 +14,7 @@ class NearbyMapperTest extends FunSpec with ShouldMatchers with BeforeAndAfterEa
   val distance = 2551.546
   val userDoc: DBObject = Map("name" -> "whatever")
   val resultDoc: DBObject = Map("dis" -> distance, "obj" -> userDoc)
-  val user = User("Foo", "Bar")
+  val user = UserBuilder().build
 
   val userMapper = mock[UserMapper]
   val mapper = new NearbyMapper(userMapper)
