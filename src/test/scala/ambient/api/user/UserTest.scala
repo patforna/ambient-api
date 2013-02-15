@@ -34,7 +34,7 @@ class UserTest extends FunSpec with ShouldMatchers {
   describe("turning a user into a map of key/value pairs") {
     it("should put all fields into a map") {
       val user = UserBuilder().withAllFieldsPopulated.build
-      user.asMap should be(Map(Id -> user.id, First -> user.first, Last -> user.last, Fbid -> user.fbid, Location -> user.location, Picture -> user.picture))
+      user.toMap should be(Map(Id -> user.id, First -> user.first, Last -> user.last, Fbid -> user.fbid, Location -> user.location, Picture -> user.picture))
     }
 
   }

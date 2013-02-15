@@ -17,7 +17,7 @@ object MongoHelpers {
   }
 
   def insert(user: User)(implicit collection: MongoCollection): ObjectId = {
-    insert(mongoify(user.asMap))
+    insert(mongoify(user.toMap))
   }
 
   def insert(keyValues: (String, Any)*)(implicit collection: MongoCollection): ObjectId = {
