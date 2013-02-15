@@ -5,14 +5,14 @@ import ambient.api.config.Dependencies._
 import ambient.api.functional.MongoHelpers._
 import ambient.api.functional.JsonHelpers._
 import ambient.api.functional.Uri._
-import ambient.api.user.User
+import ambient.api.user.UserBuilder
 import ambient.api.location.Location
 import ambient.api.config.Keys._
 import ambient.api.config.Keys
 
 class SearchTest extends FunctionalSpec {
 
-  val user = User(None, "Jae", "Lee", None, Some(Location(-0.136677, 51.537731)), None)
+  val user = UserBuilder().first("Jae").last("Lee").location(Location(-0.136677, 51.537731)).build
 
   implicit val collection = db("users")
 
