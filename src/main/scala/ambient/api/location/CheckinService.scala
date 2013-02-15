@@ -11,7 +11,7 @@ class CheckinService(db: MongoDB) {
   private val checkins = db("checkins")
 
   def checkin(userId: String, location: Location) {
-    users.update(Map(Id -> new ObjectId(userId)), $set(List(Keys.Location ->(location.longitude, location.latitude))))
-    checkins.insert(Map(UserId -> new ObjectId(userId), Keys.Location -> List(location.longitude, location.latitude)))
+    users.update(Map(Id -> new ObjectId(userId)), $set(List(Keys.Location -> location.reverse)))
+    checkins.insert(Map(UserId -> new ObjectId(userId), Keys.Location -> location.reverse))
   }
 }

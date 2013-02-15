@@ -73,5 +73,11 @@ class LocationTest extends FunSpec with ShouldMatchers {
 
   }
 
+  describe("other location methods") {
+    it("should reverse lat/longs (to make mongo happy)") {
+      Location(1.1, 2.2).reverse should be((2.2, 1.1))
+    }
+  }
+
 
 }

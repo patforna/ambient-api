@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import ambient.api.config.Dependencies.{db, checkinService => service}
 import ambient.api.location.Location
 import ambient.api.functional.MongoHelpers._
-import ambient.api.user.User
+import ambient.api.user.UserBuilder
 import com.mongodb.casbah.Imports._
 import ambient.api.config.Keys
 import ambient.api.config.Keys._
@@ -26,7 +26,7 @@ class CheckinServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfter
 
   describe("checkin") {
     it("should update a users location (and reverse lat/long to keep mongo happy)") {
-      val userId = insert(First -> "Foo", Last -> "Bar", Keys.Location ->(0, 0))
+      val userId = insert(UserBuilder().location(Location(0, 0)).build)
 
       service.checkin(userId.toString, LOCATION)
 

@@ -27,4 +27,6 @@ object Location {
 case class Location(latitude: Double, longitude: Double) {
   if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
     throw new IllegalArgumentException("Lat/Long must be in the range -90 to 90 and -180 to 180, respectively.")
+
+  def reverse: (Double, Double) = (longitude, latitude)
 }

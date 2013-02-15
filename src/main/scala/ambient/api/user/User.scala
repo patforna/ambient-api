@@ -13,5 +13,5 @@ object User {
 
 // TODO should fbid be even in here? -> Yes, as long as we use User object to create users...
 case class User(id: Option[String], first: String, last: String, fbid: Option[String], location: Option[Location], picture: Option[String]) {
-  def asMap: Map[String, Any] = Map(First -> first, Last -> last, Fbid -> fbid, Keys.Location -> location, Picture -> picture)
+  def asMap: Map[String, Any] = Map(Id -> id, First -> first, Last -> last, Fbid -> fbid, Keys.Location -> location, Picture -> picture)
 }

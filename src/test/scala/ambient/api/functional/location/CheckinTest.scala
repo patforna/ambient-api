@@ -60,7 +60,7 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def aUserWith(id: String) {
-    insert(Id -> new ObjectId(id), First -> "Marc", Last -> "Random", Keys.Location ->(-0.099392, 51.531974), Fbid -> Random.nextInt.toString) // TODO could do with a UserDocBuilder
+    insert(Id -> new ObjectId(id), First -> "Marc", Last -> "Random", Keys.Location -> Location(51.531974, -0.099392), Fbid -> Random.nextInt.toString) // TODO could do with a UserDocBuilder
   }
 
   private def aUserChecksIn(id: String, location: String) {

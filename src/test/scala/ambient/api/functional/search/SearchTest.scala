@@ -7,12 +7,11 @@ import ambient.api.functional.JsonHelpers._
 import ambient.api.functional.Uri._
 import ambient.api.user.UserBuilder
 import ambient.api.location.Location
-import ambient.api.config.Keys._
 import ambient.api.config.Keys
 
 class SearchTest extends FunctionalSpec {
 
-  val user = UserBuilder().first("Jae").last("Lee").location(Location(-0.136677, 51.537731)).build
+  val user = UserBuilder().first("Jae").last("Lee").fbid("2").location(Location(51.537731, -0.136677)).build
 
   implicit val collection = db("users")
 
@@ -35,9 +34,9 @@ class SearchTest extends FunctionalSpec {
   }
 
   private def thereAreSomeUsersInTheSystem {
-    insert(First -> "Patric", Last -> "Fornasier", Keys.Location ->(-0.104514, 51.554093), Fbid -> "1")
-    insert(First -> user.first, Last -> user.last, Keys.Location -> user.location, Fbid -> "2")
-    insert(First -> "Marc", Last -> "Hofer", Keys.Location ->(-0.099392, 51.531974), Fbid -> "3")
+    insert(UserBuilder().fbid("1").location(Location(51.554093, -0.104514)).build)
+    insert(user)
+    insert(UserBuilder().fbid("3").location(Location(51.531974, -0.099392)).build)
   }
 
   private def iSearchForUsersNear(location: String) {
