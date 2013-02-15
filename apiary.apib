@@ -19,9 +19,9 @@ GET /users/search?fbid=:string
 }
 
 Creates a new user. The newly created user.
-400: if first, last or fbid is missing
+400: if one of (first, last, fbid, picture) is missing
 409: if user with fbid exists already
-POST /users?first=:string&last=:string&fbid=:string
+POST /users?first=:string&last=:string&fbid=:string&picture=:string
 < 200
 < Content-Type: application/json
 {
@@ -29,7 +29,8 @@ POST /users?first=:string&last=:string&fbid=:string
     "id" : "511371ad57259eff0637a8da",
     "first" : "Patric",
     "last" : "Fornasier",
-    "location" : [ 51.554093, -0.104514 ]
+    "location" : [ 51.554093, -0.104514 ],
+    "picture" : "http://.../pat.jpg"
   }
 }
 
