@@ -8,6 +8,7 @@ object Keys {
   val Last = "last"
   val Fbid = "fbid"
   val Location = "location"
+  val Picture = "picture"
 
   // checkins collection
   val UserId = "user_id"

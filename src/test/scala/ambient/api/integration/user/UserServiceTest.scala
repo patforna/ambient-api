@@ -4,17 +4,15 @@ import org.scalatest.{BeforeAndAfterEach, FunSpec}
 import org.scalatest.matchers.ShouldMatchers
 import ambient.api.config.Dependencies.{db, userService => service}
 import ambient.api.functional.MongoHelpers._
-import com.mongodb.casbah.Imports._
-import ambient.api.user.User
 import ambient.api.platform.NotFoundException
 import ambient.api.config.Keys._
-import com.mongodb.MongoException.DuplicateKey
+import ambient.api.user.UserBuilder
 
 class UserServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfterEach {
 
   private implicit val collection = db("users")
 
-  private val USER = User("The", "Hoff", "42")
+  private val USER = UserBuilder().first("The").last("Hoff").fbid("42").picture("http://.../plankton.png").build
 
   override def beforeEach() {
     clearCollection()
@@ -33,11 +31,13 @@ class UserServiceTest extends FunSpec with ShouldMatchers with BeforeAndAfterEac
   }
 
   describe("creating a user") {
-    it("should create a user given (first, last, fbid)") {
+    it("should create a user given (first, last, fbid, picture)") {
       service.create(USER)
       val user = service.search(USER.fbid.get)
       user.first should be (USER.first)
       user.last should be (USER.last)
+      user.fbid should be (None) // cause it's not exposed
+      user.picture should be (USER.picture)
     }
 
     it("should return the created user") {

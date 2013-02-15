@@ -15,10 +15,11 @@ class UserToJsonTest extends FunSpec with ShouldMatchers {
     val last = "bar"
     val fbid = "42"
     val location = Location(1.1, 2.2)
+    val picture = "http://.../fish.png"
 
-    val user = User(Some(id), first, last, Some(fbid), Some(location));
+    val user = User(Some(id), first, last, Some(fbid), Some(location), Some(picture));
 
-    serialize(user) should be(json(s""" { "id" : "$id", "first" : "$first", "last" : "$last", "fbid" : "$fbid", "location" : [1.1, 2.2] } """))
+    serialize(user) should be(json( s""" { "id" : "$id", "first" : "$first", "last" : "$last", "fbid" : "$fbid", "location" : [1.1, 2.2] , "picture" : "$picture" } """))
   }
 
 }

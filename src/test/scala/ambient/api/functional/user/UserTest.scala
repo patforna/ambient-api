@@ -4,13 +4,11 @@ import ambient.api.config.Dependencies.db
 import ambient.api.functional.FunctionalSpec
 import ambient.api.functional.MongoHelpers._
 import ambient.api.functional.Uri._
-import ambient.api.user.User
+import ambient.api.user.{UserBuilder, User}
 import ambient.api.functional.JsonHelpers._
 import ambient.api.config.Keys._
 
 class UserTest extends FunctionalSpec {
-
-  private val USER = User("Stefan", "Fazzlar", "555")
 
   private implicit val collection = db("users")
 
@@ -21,8 +19,8 @@ class UserTest extends FunctionalSpec {
   describe("finding a user") {
 
     it("should find a user by her Facebook id (fb)") {
-      val id = given(someUserExists(USER))
-      when(iSearchForUserWithFbId(USER.fbid.get))
+      val id = given(someUserExists(UserBuilder().fbid("42").build))
+      when(iSearchForUserWithFbId("42"))
       then(theReturnedUserShouldHaveId(id))
     }
 
@@ -38,21 +36,23 @@ class UserTest extends FunctionalSpec {
 
   describe("creating a user") {
 
-    it("should create a user using (first, last, fbid)") {
-      when(iCreateANewUser(USER))
-      then(theUserShouldExists(USER))
-      and(theUserShouldHaveBeenReturnedInTheResponse(USER))
+    it("should create a user using (first, last, fbid, picture)") {
+      val user = UserBuilder().fbid("1").picture("fish.jpg").build
+      when(iCreateANewUser(user))
+      then(theUserShouldExists(user))
+      and(theUserShouldHaveBeenReturnedInTheResponse(user))
     }
 
-    it("should 400 if one of (first, last, fbid) is missing") {
-      val required = Map(First -> "x", Last -> "y", Fbid -> "z")
+    it("should 400 if one of (first, last, fbid, picture) is missing") {
+      val required = Map(First -> "f", Last -> "l", Fbid -> "f", Picture -> "p")
       post(UsersUri.params((required - First).toSeq:_*))(statusCode) should be (400)
       post(UsersUri.params((required - Last).toSeq:_*))(statusCode) should be (400)
       post(UsersUri.params((required - Fbid).toSeq:_*))(statusCode) should be (400)
+      post(UsersUri.params((required - Picture).toSeq:_*))(statusCode) should be (400)
     }
 
     it("should 409 if user with given fbid exists already") {
-      val user = Seq(First -> "x", Last -> "y", Fbid -> "z")
+      val user = Seq(First -> "f", Last -> "l", Fbid -> "f", Picture -> "p")
       post(UsersUri.params(user:_*))
       post(UsersUri.params(user:_*))(statusCode) should be (409)
     }
@@ -79,7 +79,7 @@ class UserTest extends FunctionalSpec {
   }
 
   def iCreateANewUser(user: User) {
-    iCreateANewUser(First -> user.first, Last -> user.last, Fbid -> user.fbid.get)
+    iCreateANewUser(First -> user.first, Last -> user.last, Fbid -> user.fbid.get, Picture -> user.picture.get)
   }
 
   def iCreateANewUser(keyValues: (String, Any)*) {
@@ -88,13 +88,17 @@ class UserTest extends FunctionalSpec {
 
   def theUserShouldExists(user: User) {
     iSearchForUserWithFbId(user.fbid.get)
-    theReturnedUserShouldHaveField(First, user.first)
-    theReturnedUserShouldHaveField(Last, user.last)
+    allUserFieldsShouldBeThere(user)
   }
 
   def theUserShouldHaveBeenReturnedInTheResponse(user: User) {
-    theReturnedUserShouldHaveField(First, USER.first)
-    theReturnedUserShouldHaveField(Last, USER.last)
+    allUserFieldsShouldBeThere(user)
+  }
+
+  private def allUserFieldsShouldBeThere(user: User) {
+    theReturnedUserShouldHaveField(First, user.first)
+    theReturnedUserShouldHaveField(Last, user.last)
+    theReturnedUserShouldHaveField(Picture, user.picture.get)
   }
 
 }

@@ -12,9 +12,10 @@ class UserMapper {
     val first = doc.as[String](First)
     val last = doc.as[String](Last)
     val fbid = None // TODO should fbid be even in here?
-    val location = Location(doc.getAs[Seq[Double]](Keys.Location))
+    val location = Location(doc.getAs[Seq[Double]](Keys.Location)) // TODO should we expose location?
+    val picture = doc.getAs[String](Picture)
 
-    User(id, first, last, fbid, location)
+    User(id, first, last, fbid, location, picture)
   }
 }
 

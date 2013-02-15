@@ -10,7 +10,7 @@ class UserService(db: MongoDB, userMapper: UserMapper) {
   private val users = db("users")
 
   def create(user: User): User = {
-    val doc: DBObject = Map(First -> user.first, Last -> user.last, Fbid -> user.fbid)
+    val doc: DBObject = user.asMap
     try {
       users.insert(doc, WriteConcern.JournalSafe)
     }
