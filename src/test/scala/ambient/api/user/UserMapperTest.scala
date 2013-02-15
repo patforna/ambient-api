@@ -14,18 +14,16 @@ class UserMapperTest extends FunSpec with ShouldMatchers {
   val id = "507f1f77bcf86cd799439011"
   val first = "*first*"
   val last = "*last*"
-  val lat = 1.0
-  val long = 2.0
   val required = Map(Id -> new ObjectId(id), First -> first, Last -> last)
   var picture = "http://.../foo.jpg"
-  val optional = { Map(Keys.Location -> MongoDBList(long, lat), Picture -> picture) }
+  val optional = { Map(Keys.Location -> MongoDBList(1.0, 2.0), Picture -> picture) }
 
   val mapper = new UserMapper
 
   describe("map to user") {
 
     it("should construct a user") {
-      mapper.map(required ++ optional) should be(User(Some(id), first, last, None, Some(Location(lat, long)), Some(picture)))
+      mapper.map(required ++ optional) should be(User(Some(id), first, last, None, None, Some(picture)))
     }
 
     it("shouldn't mind if optional fields are missing") {

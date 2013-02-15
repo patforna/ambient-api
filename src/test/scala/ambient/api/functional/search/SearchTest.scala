@@ -30,7 +30,7 @@ class SearchTest extends FunctionalSpec {
     it("should find nearby users") {
       given(thereAreSomeUsersInTheSystem)
       when(iSearchForUsersNear("51.515874,-0.125613"))
-      `then`(theResponseShouldInclude( """ { "user" : { "first" : "Jae", "last": "Lee", "location": [51.537731, -0.136677] }, "distance" : 2550 }  """))
+      `then`(theResponseShouldInclude( """ { "user" : { "first" : "Jae", "last": "Lee" }, "distance" : 2550 }  """))
     }
   }
 

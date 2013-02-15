@@ -70,9 +70,8 @@ class CheckinTest extends FunctionalSpec {
   }
 
   private def theUsersLocationShouldHaveBeenUpdatedTo(userId: String, location: String) {
-    val Array(lat, long) = location.split(",")
     iSearchForUsersNear(location)
-    ((responseJson \ "nearby")(0) \\ "location").extract[List[Double]] should be (List(lat.toDouble, long.toDouble))
+    ((responseJson \ "nearby")(0) \ "distance").extract[Int] should be (0)
   }
 
   private def iSearchForUsersNear(location: String) {
