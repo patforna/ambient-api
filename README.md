@@ -1,8 +1,8 @@
-# Welcome to ambient
+# Getting Started
 
 ## Workstation Setup
 
-Here's what you need on your workstation:
+Here's what you need on your workstation to work on both the api and the iOS app:
 
 * XCode and Command Line Tools
 * [Java 7 JDK](http://download.oracle.com/otn-pub/java/jdk/7u11-b21/jdk-7u11-macosx-x64.dmg)
@@ -29,17 +29,27 @@ Here's what you need on your workstation:
 
 Make sure you've got Mongo running, and just execute:
 
-         rake
+    rake
+
+## Running
+
+Use sbt for local development on [port 8080](http://localhost:8080/search/nearby?location=51.5,-0.1):
+
+    ./sbt container-start
+
+Or use foreman to start the bundled app via `Procfile` on [port 5000](http://localhost:5000/search/nearby?location=51.5,-0.1):
+
+    foreman start
 
 ## Deploying to Heroku
 
 In order to be able to push to Heroku, you need to add it as a remote repo to your git config:
 
-        heroku git:remote -a ambient-api
+    heroku git:remote -a ambient-api
 
 Given you've been granted the apropriate permissions, you can then deploy the app:
 
-        rake deploy
+    rake deploy
 
 ## Facebook SDK API Reference (optional)
 
