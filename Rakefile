@@ -11,6 +11,20 @@ task :all do
   sbt 'clean', 'compile', 'test', 'bundle'
 end
 
+namespace 'mongo' do
+  desc "Configures Mongo for the app"
+  task :evolve do
+    current_dir = File.expand_path(File.dirname(__FILE__))
+    evolutions_dir = File.join(current_dir, 'ops', 'mongo', 'evolve')
+    evolutions = Dir.glob(File.join(evolutions_dir, '*.js')).sort
+    evolutions.each do |evolution|
+      puts "About to apply: #{File.basename(evolution)}"
+      `mongo #{evolution}`
+      raise "Failed to apply #{File.basename(evolution)}." if $?.exitstatus != 0
+    end
+  end
+end
+
 namespace 'app' do
   desc "Starts the app"	
   task :start do
@@ -30,6 +44,7 @@ end
 
 desc "Deploys to target environment"
 task :deploy do
+  # TODO call mongo:evolve on remote server
   sh 'git', 'push', 'heroku', 'master'
 end
 
@@ -42,14 +57,7 @@ task :setup do
   `heroku addons:add zerigo_dns:basic`
   `heroku domains:add api.discoverambient.com`
   `heroku addons:add mongohq`
-  # go to heroku dashboard and then to mongo addon
-  # create a new user / password
-  # connect via mongo console
-  # db.users.ensureIndex({"location": "2d"})
-  #
-  # db.users.insert({name:'Patric Fornasier', job:'Developer at Ambient', location:[-0.104282, 51.554529]})
-  # db.users.insert({name:'Jae Lee', job:'Developer at Forward', location:[-0.136677,51.537731]})
-  # db.users.insert({name:'Marc Hofer', job:'Developer at ThoughtWorks', location:[-0.099392,51.531974]})
+  # go to heroku dashboard and then to mongo addon to create a new user / password for the mongo console
 end
 
 def sbt(*targets)

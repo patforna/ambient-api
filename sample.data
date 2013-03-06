@@ -1,8 +1,0 @@
-mongo linus.mongohq.com:10027/app11017103 -u <user> -p<password>
-
-db.users.ensureIndex({"location": "2d"})
-db.users.ensureIndex({"fbid" : 1}, {"unique" : true})
-
-db.users.insert({first:'Patric', last:'Fornasier', fbid:"1", location:[-0.104514,51.554093], picture:"pat.png"})
-db.users.insert({first:'Jae', last:'Lee', fbid:"2", location:[-0.136677,51.537731], picture:"jae.png"})
-db.users.insert({first:'Marc', last:'Hofer', fbid:"3", location:[-0.099392,51.531974], picture:"hoff.png"})
